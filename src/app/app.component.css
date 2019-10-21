@@ -1,0 +1,26 @@
+.header-li{
+    padding-left: 25px;
+    margin-top: 23px;
+    color : #30419b;
+}
+
+.btn{
+    margin-right: 20px;
+}
+
+.rounded-circle{
+    margin-right: 10px;
+}
+
+.fa-user-edit:before {
+    padding-right: 10px;
+}
+
+.mdi-lock:before {
+    padding-right: 13px;
+}
+
+.mdi-logout-variant:before {
+    padding-right: 13px;
+}
+
