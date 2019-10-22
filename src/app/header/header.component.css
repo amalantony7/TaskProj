@@ -1,0 +1,85 @@
+.header-li{
+    padding-left: 25px;
+    margin-top: 23px;
+    color : #30419b;
+}
+.ti-plus{
+    padding-right: 5px;
+}
+
+.btn{
+    margin-right: 20px;
+}
+
+.rounded-circle{
+    margin-right: 10px;
+}
+
+.fa-user-edit:before {
+    padding-right: 10px;
+}
+
+.mdi-lock:before {
+    padding-right: 13px;
+}
+
+.mdi-logout-variant:before {
+    padding-right: 13px;
+}
+
+#sidebar-menu > ul > li > a {
+    color: white;
+    font-weight: 400;
+    display: block;
+    padding: 13px 20px;
+    font-size: 16px;
+    position: relative;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    font-family: "Poppins", sans-serif;
+    margin-left: 20px;
+}
+
+.suggestion-icon i {
+    width: 50px;
+    height: 20px;
+    line-height: 30px;
+    color: #ffffff;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #ffffff;
+    font-size: 15px;
+}
+
+.mdi-plus:before {
+    color: #30419b;
+    margin-top : 2.5px;
+}
+
+.subHeader{
+    color: white;
+    font-weight: 500;
+    display: block;
+    padding: 13px 20px;
+    font-size: 16px;
+    position: relative;
+    transition: all 0.5s;
+    font-family: "Poppins", sans-serif;
+    margin-left: 26px;
+}
+
+.mdi-delete:before {
+    margin-left: 58px;
+}
+
+#sidebar-menu .submenu > li > a {
+    padding-left: 0px;
+    margin-top: 15px;
+}
+
+
+#sidebar-menu .submenu li a {
+    font-size: 14px;
+    font-weight: 500;
+}
