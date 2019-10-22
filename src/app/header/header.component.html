@@ -23,7 +23,12 @@
                     <div class="dropdown notification-list nav-pro-img">
                         <a class="dropdown-toggle nav-link arrow-none nav-user" data-toggle="dropdown" href="#"
                             role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="assets/images/users/user-4.jpg" alt="user" class="rounded-circle">
+                            <img *ngIf="userImg; else elseBlock" [src]="userImg" class="rounded-circle">
+                            <ng-template #elseBlock>
+                                <ngx-avatar [src]="userImg" [name]="userName"></ngx-avatar>
+                            </ng-template>
+
+
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                             <!-- item-->
@@ -91,7 +96,7 @@
     <!-- Start content -->
     <div class="content">
         <div class="container-fluid">
-            <app-blank-board></app-blank-board>            
+            <app-blank-board></app-blank-board>
         </div>
         <!-- container-fluid -->
 

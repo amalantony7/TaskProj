@@ -3,6 +3,14 @@
     margin-top: 23px;
     color : #30419b;
 }
+
+.notification-list .nav-link {
+    padding: 0 15px;
+    line-height: 70px;
+    color: #495057;
+    max-height: 34px !important;
+}
+
 .ti-plus{
     padding-right: 5px;
 }
