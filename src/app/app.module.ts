@@ -9,12 +9,19 @@ import { HeaderComponent } from './header/header.component';
 import { BlankBoardComponent } from './blank-board/blank-board.component';
 import { AvatarModule} from 'ngx-avatar';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    BlankBoardComponent
+    BlankBoardComponent,
+    LoginComponent,
+    ResetPasswordComponent,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +29,8 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MaterialModule,
     AvatarModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

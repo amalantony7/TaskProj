@@ -1,0 +1,8 @@
+.error-bg {
+    background-image: url("../../assets/images/error.png");
+    position: absolute;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    top: 0;
+}

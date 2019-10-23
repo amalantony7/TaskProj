@@ -4,6 +4,13 @@
     color : #30419b;
 }
 
+img {
+    width: 20px;
+    height: 15px;
+    margin-left: 0px;
+    margin-right: 15px;
+}
+
 .notification-list .nav-link {
     padding: 0 15px;
     line-height: 70px;

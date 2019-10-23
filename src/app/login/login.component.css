@@ -1,0 +1,77 @@
+@media (min-width: 768px) {
+
+    .h-md-100 { height: 100vh; }
+
+}
+.btn{
+     border-radius: 30px;
+     width: 250px;
+}
+.bg-indigo {
+     background: #e7f5fe; 
+}
+.text-cyan { 
+    color: #35bdff; 
+}
+
+.title{
+    font-weight: 900 bold;
+    letter-spacing: normal;
+}
+
+
+
+.input-group-text {
+    font-size: 13px;
+    background-color: #6a8bbe;
+    padding-left: 15px;
+    
+}
+
+  .form-control{
+    width : 400px;
+    height: 50px;
+    background-color: #6a8bbe;
+    color: white;
+    border-radius: 8px;
+    padding-left: 70px;
+  }
+
+  
+  .inputWithIcon {
+    position: relative;
+  }
+  
+  .inputWithIcon i {
+    position: absolute;
+    left: 0;
+    top: 8.5px;
+    padding: 9px 8px;
+    color: white;
+    padding-left: 20px;
+  }
+  
+  ::placeholder {
+    color: white;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+  }
+
+  .pass-icon{
+    position: absolute;
+    margin-left: 330px;
+    color: white;
+    margin-top: -2.5px;
+    
+  }
+  
+  .custom-control-label{
+    padding-left: 10px;
+    font-size: 10pt;
+    font-weight: 400;
+    padding-top: 2.5px;
+  }
+  
+
+  
