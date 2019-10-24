@@ -21,20 +21,22 @@
                 <!-- User Profile-->
                 <li class="dropdown notification-list list-inline-item">
                     <div class="dropdown notification-list nav-pro-img">
-                        <a class="dropdown-toggle nav-link arrow-none nav-user" data-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="dropdown-toggle nav-link nav-user" data-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="false" aria-expanded="false">
                             <img *ngIf="userImg; else elseBlock" [src]="userImg" class="rounded-circle">
                             <ng-template #elseBlock>
-                                <ngx-avatar [src]="userImg" [name]="userName"></ngx-avatar>
+                                <img class="rounded-circle"
+                                    src="https://ui-avatars.com/api/?name={{initName[0].toUpperCase()}}&background=0D8ABC&color=fff">
                             </ng-template>
-
-
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                             <!-- item-->
-                            <a class="dropdown-item" href="#"><img src="assets/icons/Group 120.svg"> Profile</a>
-                            <a class="dropdown-item" href="#"><i class="mdi mdi-lock"></i> Reset Password</a>
-                            <a class="dropdown-item" href="#"><img src="assets/icons/logout.svg"> Logout</a>
+                            <a class="dropdown-item" href="#"><img class="drop-img" src="assets/icons/Group 120.svg">
+                                Profile</a>
+                            <a class="dropdown-item" href="#" routerLink="/resetpassword" routerLinkActive="active"><i
+                                    class="mdi mdi-lock"></i> Reset Password</a>
+                            <a class="dropdown-item" href="#"><img class="drop-img" src="assets/icons/logout.svg">
+                                Logout</a>
                         </div>
                     </div>
                 </li>
@@ -43,7 +45,7 @@
 
             <ul class="list-inline menu-left mb-0">
                 <li class="float-left">
-                    <h4 class="header-li"> Blank Board</h4>
+                    <h4 class="header-li"> {{tableName}}</h4>
                 </li>
             </ul>
 
@@ -61,26 +63,20 @@
             <!-- Left Menu Start -->
             <ul class="metismenu" id="side-menu">
                 <li>
-                    <a href="index.html" class="waves-effect">
+                    <a class="waves-effect">
                         <div class="suggestion-icon float-right">
-                            <i class="mdi mdi-plus"></i>
+                            <i (click)="addNewBoard()" class="mdi mdi-plus"></i>
                         </div> <span> BOARDS </span>
                     </a>
-                    <ul class="subHeader">
-                        <a class="waves-effect"><span>Blank Board <span class="float-right"><a
-                                        class="mdi mdi-delete float-right"></a></span> </span></a>
-                        <ul class="submenu">
-                            <li><a href=""> Group 1</a></li>
-                            <li><a href=""> Group 2</a></li>
-                            <li><a href=""> Group 3</a></li>
-                            <li><a href=""> Group 4</a></li>
-                            <li><a href=""> Group 5</a></li>
-                        </ul>
-                    </ul>
-                </li>
-
                 <li>
-
+                <li *ngFor="let tabName of tableName">
+                    <a class="waves-effect">
+                        <span>{{tabName}}
+                            <span class="float-right">
+                                <a class="mdi mdi-delete float-right"></a>
+                            </span> 
+                        </span>
+                    </a>
                 </li>
             </ul>
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 
 @Component({
   selector: 'app-header',
@@ -7,12 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  public userImg="assets/images/users/user-4.jpg";
-  public userName="Amal"
+  public userImg="";
+  public userName="Amal";
+  public tableName = ['Blank Board'];
+
+  initName : Array<string> = this.userName.split('');
+  private isButtonVisible = false;
+
+
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  addNewBoard(){
+    
+    this.tableName.push("new table");
+    
+  }
+
+  deleteBoard(){
+    
   }
 
 }

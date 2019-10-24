@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Passwordvalidator } from '../validators/password_validator';
 
 @Component({
   selector: 'app-reset-password',
@@ -32,7 +33,7 @@ export class ResetPasswordComponent implements OnInit {
       oPassword : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(10)]],
       nPassword : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(10)]],
       cnPassword : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(10)]]
-    });
+    }, {validator : Passwordvalidator});
 
   }
 

@@ -4,7 +4,28 @@
     color : #30419b;
 }
 
-img {
+.navbar-custom .dropdown-menu.dropdown-menu-right {
+    top: 210% !important;
+    right: 20px !important;
+    left: auto !important;
+}
+
+.notification-list.list-inline-item:not(:last-child) {
+    margin-right: 25px;
+}
+
+.nav-user{
+    height: 34px !important;
+    width: 34px !important;
+    margin-right: 40px !important;
+}
+
+.user-img{
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.drop-img {
     width: 20px;
     height: 15px;
     margin-left: 0px;
