@@ -1,14 +1,21 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './home/header/header.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { BlankBoardComponent } from './home/blank-board/blank-board.component';
+import { HomeComponent } from './home/home.component';
 
 
 const routes: Routes = [
+  {path : '' , redirectTo : "/home" , pathMatch : "full"},
+  {path : "home" , component : HomeComponent , children : [
 
-  {path: "header" , component: HeaderComponent},
+    {path: "header" , component: HeaderComponent},
+    {path: "blankboard" , component : BlankBoardComponent}
+
+  ]}, 
   {path: "login" , component: LoginComponent},
   {path: "resetpassword" , component: ResetPasswordComponent},
   {path : "**" , component: PagenotfoundComponent}

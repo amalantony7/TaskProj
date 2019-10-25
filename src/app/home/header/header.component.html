@@ -35,7 +35,8 @@
                                 Profile</a>
                             <a class="dropdown-item" href="#" routerLink="/resetpassword" routerLinkActive="active"><i
                                     class="mdi mdi-lock"></i> Reset Password</a>
-                            <a class="dropdown-item" href="#"><img class="drop-img" src="assets/icons/logout.svg">
+                            <a class="dropdown-item" href="#" routerLink="/login" routerLinkActive="active"><img
+                                    class="drop-img" src="assets/icons/logout.svg">
                                 Logout</a>
                         </div>
                     </div>
@@ -45,7 +46,7 @@
 
             <ul class="list-inline menu-left mb-0">
                 <li class="float-left">
-                    <h4 class="header-li"> {{tableName}}</h4>
+                    <h4 class="header-li"> {{tableName[0]}}</h4>
                 </li>
             </ul>
 
@@ -63,19 +64,17 @@
             <!-- Left Menu Start -->
             <ul class="metismenu" id="side-menu">
                 <li>
-                    <a class="waves-effect">
-                        <div class="suggestion-icon float-right">
-                            <i (click)="addNewBoard()" class="mdi mdi-plus"></i>
-                        </div> <span> BOARDS </span>
+                    <a class="menu-title">
+                        <img (click)="addNewBoard()" src="../assets/icons/Group 41.svg" class="cir-img pt-1 float-right">
+                        <span> BOARDS </span>
                     </a>
                 <li>
                 <li *ngFor="let tabName of tableName">
-                    <a class="waves-effect">
-                        <span>{{tabName}}
-                            <span class="float-right">
-                                <a class="mdi mdi-delete float-right"></a>
-                            </span> 
-                        </span>
+                    <a class="waves-effect" href="" routerLink="blankboard" routerLinkActive="active" >
+                        <a class="mdi mdi-delete float-right"></a>
+                        <div class="nav-side-list">
+                            <span>{{tabName}}</span>
+                        </div>
                     </a>
                 </li>
             </ul>
@@ -88,15 +87,4 @@
     <!-- Sidebar -left -->
 
 </div>
-<div class="content-page">
-    <!-- Start content -->
-    <div class="content">
-        <div class="container-fluid">
-            <app-blank-board></app-blank-board>
-        </div>
-        <!-- container-fluid -->
-
-    </div>
-    <!-- content -->
-
-</div>
+<router-outlet></router-outlet>

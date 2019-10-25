@@ -1,0 +1,16 @@
+<div class="alertify" align="center">
+    <div class="dialog">
+        <h5 class="msg pt-2" mat-dialog-title>
+            Enter Board Name
+        </h5>
+        <mat-dialog-actions>
+            <div class="form-group">
+                <input type="text" class="form-control rounded" placeholder="Enter Board" [(ngModel)]="data.name">
+                <div class="flex pt-4 ">
+                    <button class="btn btn-outline-primary float-left" (click)="onNoClick()">Cancel</button>
+                    <button class="btn btn-outline-primary float-right" [mat-dialog-close]="data.name">Ok</button>
+                </div>
+            </div>
+        </mat-dialog-actions>
+    </div>
+</div>
