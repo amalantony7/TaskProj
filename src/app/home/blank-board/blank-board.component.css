@@ -1,5 +1,6 @@
 .card-body {
     margin-top: 10px;
+    font-family: "Poppins", sans-serif !important;
 }
 
 .del-img{
@@ -21,6 +22,12 @@
 
 .notification-list.show .nav-link {
     background-color: white;
+}
+
+
+.dropdown-menu {
+    font-size: 12px !important;
+    font-family: "Poppins", sans-serif !important;
 }
 
 .dropdown-menu-right {
@@ -65,12 +72,12 @@ img {
     padding-right: 8px;
 }
 
+
 ::ng-deep .auto-com {
     min-width: 170px;
     max-width: 170px !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow: auto !important;
     -webkit-overflow-scrolling: touch;
     visibility: hidden;
     max-height: 100px !important;
@@ -83,9 +90,10 @@ img {
 }
 
 ::ng-deep .mat-option {
-    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-family: "Poppins", sans-serif !important;
     font-size: 12px !important;
 }
+
 
 mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
     padding-left: 10px;
@@ -101,6 +109,8 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
     outline: 0;
     font: inherit;
     color: initial;
+    font-family: "Poppins", sans-serif !important;
+    font-weight: 900;
 }
 
 .auto-img{
@@ -114,11 +124,14 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 10px;
+    font-family: "Poppins", sans-serif !important;
+    background: #F9F9F9 !important;
   }
 
 
   .mat-header-cell {
     color: unset;
+    font-family: "Poppins", sans-serif !important;
 }
 
 .mat-row:hover {
@@ -144,10 +157,13 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
     box-sizing: border-box;
     padding-top: 10px;
     padding-bottom: 10px;
+    font-family: "Poppins", sans-serif !important;
+    
 }
 
   .mat-footer-row {
     font-weight: 500;
+    font-family: "Poppins", sans-serif !important;
   }
   
   th.mat-sort-header-sorted {

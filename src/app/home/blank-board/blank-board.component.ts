@@ -1,27 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {  MatSort } from '@angular/material';
-import { MatTableDataSource} from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { MatSort } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { startWith, map } from 'rxjs/operators';
+import { PeriodicElement } from 'src/app/models/periodic';
+import { CoreService } from 'src/app/services/core.service';
 
 
 
-export interface TableFields {
 
-  status : String,
-  text : String,
-  peoples : String,
-  date : Date,
-  numbers : number
-
-}
-
-const Table_Data : TableFields[] = [
-  { text : "Item name 1" , status : "Delivered" , date : new Date("2/05/2015") , peoples : "Rosemary Rajan" , numbers : 201536 },
-  { text : "Item name 2" , status : "Delivered" , date : new Date("4/10/2019") , peoples : "Romy Bobby" , numbers : 341536 }
-]
+// const Table_Data : TableFields[] = [
+//   { text : "Item name 1" , status : "Delivered" , date : new Date("2/05/2015") , peoples : "Rosemary Rajan" , numbers : 201536 },
+//   { text : "Item name 2" , status : "Delivered" , date : new Date("4/10/2019") , peoples : "Romy Bobby" , numbers : 341536 }
+// ]
 
 
 @Component({
@@ -31,29 +24,47 @@ const Table_Data : TableFields[] = [
 })
 export class BlankBoardComponent implements OnInit {
 
-  displayedColumns : string[] = ['select' , 'Item Name' , 'Status' , 'Date' , 'Members' , 'Amount'];
-  dataSource = new MatTableDataSource(Table_Data);
-  dataSource1 = Table_Data;
+  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
+  dataSource: any;
+  controls: FormArray;
+  data = Object.assign(this.core.list);
+  selection = new SelectionModel<PeriodicElement[]>(true, []);
 
-  options : string[] = ["Rosemary Rajan" , "Romy Bobbydfdsfdsfsdfsdfsdfsdfsdfsdfsdf" , "Sasank Thaliyil" , "Afsal M H" , "Anith"];
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+
+  options: string[] = this.core.list.map(e => e.name);
   myControl = new FormControl();
-  filteredOptions : Observable<string[]>;
-  selection = new SelectionModel<TableFields>(true, []);
+  filteredOptions: Observable<string[]>;
 
 
+  public collapsed = false;
 
-  constructor() { }
-
-  @ViewChild(MatSort, { static: true}) sort: MatSort;
+  constructor(private core: CoreService) { }
 
   ngOnInit() {
+    this.core.list$.subscribe(res => {
+      this.dataSource = new MatTableDataSource(res)
+    })
+
+    const toGroups = this.core.list$.value.map(entity => {
+      return new FormGroup({
+        position: new FormControl(entity.position, [Validators.required]),
+        name: new FormControl(entity.name, [Validators.required]),
+        weight: new FormControl(entity.weight, Validators.required),
+        symbol: new FormControl(entity.symbol, Validators.required)
+      }, { updateOn: "blur" });
+    });
+
+    this.controls = new FormArray(toGroups);
 
     this.dataSource.sort = this.sort;
+
     this.filteredOptions = this.myControl.valueChanges
-          .pipe(
-            startWith(''),
-            map( value => this._filter(value))
-          );
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
 
   }
 
@@ -65,6 +76,36 @@ export class BlankBoardComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.toLowerCase().includes(filterValue));
   }
+
+
+  updateField(index, field) {
+    const control = this.getControl(index, field);
+    if (control.valid) {
+      this.core.update(index, field, control.value);
+      this.dataSource.sort = this.sort;
+      console.log(index, field, control.value);
+    }
+
+  }
+
+  removeSelectedRows() {
+
+    this.selection.selected.forEach(item => {
+      let index: number = this.data.findIndex(d => d === item);
+      console.log(this.data.findIndex(d => d === item));
+      this.data.splice(index, 1)
+      this.dataSource = new MatTableDataSource<PeriodicElement[]>(this.dataSource.data);
+      console.log(this.dataSource.data);
+      this.core.list$.next(this.dataSource.data);
+    });
+    this.selection = new SelectionModel<PeriodicElement[]>(true, []);
+  }
+
+  getControl(index, fieldName) {
+    const a = this.controls.at(index).get(fieldName) as FormControl;
+    return this.controls.at(index).get(fieldName) as FormControl;
+  }
+
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -81,18 +122,13 @@ export class BlankBoardComponent implements OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: TableFields): string {
+  checkboxLabel(row?): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.numbers + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-
-  /** Gets the total cost of all transactions. */
-  getTotalCost() {
-    return this.dataSource1.map(t => t.numbers).reduce((acc, value) => acc + value, 0);
-  }
 
 
 }

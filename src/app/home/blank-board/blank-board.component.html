@@ -7,7 +7,7 @@
                 <div class="col-xl-12">
                     <mat-card class="card m-b-30 mt-4">
                         <mat-card-content class="card-body">
-                            <div class="page-title-box">
+                            <div class="page-title-box pt-0">
                                 <div class="row align-items-center">
                                     <div class="col-sm-4">
                                         <div class="dropdown notification-list">
@@ -17,9 +17,12 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dr-men-right">
                                                 <!-- item-->
-                                                <a class="dropdown-item" href="#"><img
+                                                <a class="dropdown-item" *ngIf="collapsed===false" (click)="collapsed=true"><img
                                                         src="assets/icons/unfold_more-24px.svg">
                                                     Collapase this group</a>
+                                                <a class="dropdown-item" *ngIf="collapsed===true" (click)="collapsed=false"><img
+                                                        src="assets/icons/unfold_more-24px.svg">
+                                                    Expand this group</a>    
                                                 <a class="dropdown-item" href="#"><i class="mdi mdi-pencil-outline"></i>
                                                     Rename group</a>
                                                 <a class="dropdown-item" href="#"><i class="fas fa-trash"></i>
@@ -30,7 +33,7 @@
                                     <div class="col-sm-8">
                                         <div class="row">
                                             <div class="col-sm-10">
-                                                <button class="btn btn-outline-primary float-right" type="button">
+                                                <button class="btn btn-outline-primary float-right" *ngIf="this.selection.hasValue()" (click)="removeSelectedRows()" type="button">
                                                     Delete
                                                 </button>
                                             </div>
@@ -47,13 +50,14 @@
                                                             [matAutocomplete]="auto"
                                                             (keyup)="applyFilter($event.target.value)"
                                                             placeholder="Enter Name">
-                                                        <mat-autocomplete class="auto-com" panelWidth = "170px" #auto="matAutocomplete">
-                                                            <mat-option  *ngFor="let option of filteredOptions | async"
+                                                        <mat-autocomplete class="auto-com" panelWidth="170px"
+                                                            #auto="matAutocomplete">
+                                                            <mat-option *ngFor="let option of filteredOptions | async"
                                                                 [value]="option">
                                                                 <div>
-                                                                        <img src="assets/images/users/user-2.jpg" alt=""
-                                                                            class="auto-img rounded-circle mr-2"> {{option}}
-                                                                    </div>
+                                                                    <img src="assets/images/users/user-2.jpg" alt=""
+                                                                        class="auto-img img-fluid rounded-circle mr-2"> {{option}}
+                                                                </div>
                                                             </mat-option>
                                                         </mat-autocomplete>
 
@@ -78,77 +82,111 @@
 
                                 </div> <!-- end row -->
                             </div>
+                            <div [style.display] = "collapsed? 'none' : 'block'">
+                                <div class="table-responsive" >
 
-                            <div class="table-responsive">
-                                <table mat-table matSort [dataSource]="dataSource"  class="table table-hover mat-elevation-z8">
+                                <table  mat-table [dataSource]="dataSource" matSort
+                                    class="table table-hover mat-elevation-z8" >
 
-                                    <!-- CheckBox Column -->
                                     <ng-container matColumnDef="select">
-                                        <th mat-header-cell *matHeaderCellDef>
+                                        <mat-header-cell *matHeaderCellDef>
                                             <mat-checkbox (change)="$event ? masterToggle() : null"
                                                 [checked]="selection.hasValue() && isAllSelected()"
                                                 [indeterminate]="selection.hasValue() && !isAllSelected()"
                                                 [aria-label]="checkboxLabel()">
                                             </mat-checkbox>
-                                        </th>
-                                        <td mat-cell *matCellDef="let row">
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row">
                                             <mat-checkbox (click)="$event.stopPropagation()"
                                                 (change)="$event ? selection.toggle(row) : null"
                                                 [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
                                             </mat-checkbox>
-                                        </td>
-                                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                                        </mat-cell>
                                     </ng-container>
 
-                                    <!-- Text Column -->
-                                    <ng-container matColumnDef="Item Name">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header >
-                                            <!-- <input type="text" [(ngModel)] = "No"> {{No}}  --> Item Name
-                                        </mat-header-cell>
-                                        <mat-cell *matCellDef="let element"> {{element.text}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                                    <!-- Position Column -->
+                                    <ng-container matColumnDef="position">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+                                        <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
                                     </ng-container>
 
-                                    <!-- Status Column -->
-                                    <ng-container matColumnDef="Status">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header > Status </mat-header-cell>
-                                        <mat-cell *matCellDef="let element"><span class="badge badge-success">{{element.status}}</span></mat-cell>
-                                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                                    <!-- Name Column -->
+                                    <ng-container matColumnDef="name">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+                                        <mat-cell *matCellDef="let element;let index = index">
+                                            <editable (update)="updateField(index, 'name')">
+                                                <ng-template viewMode>
+                                                    {{element.name}}
+                                                </ng-template>
+                                                <ng-template editMode>
+                                                    <mat-form-field class="example-full-width">
+                                                        <input matInput
+                                                            [class.is-invalid]="getControl(index , 'name').invalid && getControl(index , 'name').touched"
+                                                            [formControl]="getControl(index, 'name')">
+                                                        <mat-error
+                                                            *ngIf="getControl(index, 'name').hasError('required')">
+                                                            This Field is required!
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                    <!-- <input  [formControl]="getControl(index, 'name')" focusable editableOnEnter> -->
+                                                </ng-template>
+                                            </editable>
+                                        </mat-cell>
+
+
                                     </ng-container>
 
-                                    <!-- Date Column -->
-                                    <ng-container matColumnDef="Date">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header > Date </mat-header-cell>
-                                        <mat-cell *matCellDef="let element"> {{element.date | date:"dd/MM/yyyy"}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef>
-                                        </mat-footer-cell>
+                                    <!-- Weight Column -->
+                                    <ng-container matColumnDef="weight">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Weight </mat-header-cell>
+                                        <mat-cell *matCellDef="let element;let index = index">
+                                            <span class="badge badge-success">
+                                                <editable (update)="updateField(index, 'weight')">
+                                                    <ng-template viewMode>
+                                                        {{element.weight}}
+                                                    </ng-template>
+                                                    <ng-template editMode>
+                                                        <mat-form-field class="example-full-width">
+                                                            <input matInput [formControl]="getControl(index, 'weight')">
+                                                        </mat-form-field>
+                                                    </ng-template>
+                                                </editable>
+                                            </span>
+                                        </mat-cell>
                                     </ng-container>
 
-                                    <!-- Members Column -->
-                                    <ng-container matColumnDef="Members">
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header > Members </mat-header-cell>
-                                        <mat-cell *matCellDef="let element">
-                                                <div>
-                                                        <img src="assets/images/users/user-2.jpg" alt=""
-                                                            class="thumb-md rounded-circle mr-2"> {{element.peoples}}
-                                                    </div>
-                                                  </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="symbol">
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </mat-header-cell>
+                                        <mat-cell *matCellDef="let element;let index = index">
+                                            <div>
+                                                <img src="assets/images/users/user-2.jpg" alt=""
+                                                    class="thumb-md img-fluid rounded-circle mr-2">
+                                                <editable (update)="updateField(index, 'symbol')">
+                                                    <ng-template viewMode>
+                                                        {{element.symbol}}
+                                                    </ng-template>
+                                                    <ng-template editMode>
+                                                        <mat-form-field class="example-full-width">
+                                                            <input matInput [formControl]="getControl(index, 'symbol')"
+                                                                focusable editableOnEnter>
+                                                            <mat-error
+                                                                *ngIf="getControl(index, 'symbol').hasError('required')">
+                                                                This Field is required!
+                                                            </mat-error>
+                                                        </mat-form-field>
+                                                    </ng-template>
+                                                </editable>
+                                            </div>
+                                        </mat-cell>
                                     </ng-container>
 
-                                    <!-- Number Column -->
-                                    <ng-container matColumnDef="Amount" >
-                                        <mat-header-cell *matHeaderCellDef mat-sort-header contenteditable="true"> Number </mat-header-cell>
-                                        <mat-cell *matCellDef="let element" contenteditable="true" > {{element.numbers}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> {{getTotalCost()}} <br /> Sum
-                                        </mat-footer-cell>
-                                    </ng-container>
-
-                                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky : true"></mat-header-row>
+                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                                     <mat-row *matRowDef="let row; columns: displayedColumns;"
                                         (click)="selection.toggle(row)"></mat-row>
-                                    <mat-footer-row *matFooterRowDef="displayedColumns"></mat-footer-row>
                                 </table>
+
+
 
                                 <!-- 
                                     <thead>
@@ -259,13 +297,15 @@
                                             </td>
                                         </tr>
                                     </tbody> -->
+                                </div>
                             </div>
-
                         </mat-card-content>
                     </mat-card>
                 </div>
 
             </div>
+
+
 
         </div>
         <!-- container-fluid -->

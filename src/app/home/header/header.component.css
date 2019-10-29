@@ -32,6 +32,15 @@
     margin-right: 15px;
 }
 
+.dropdown-menu {
+    font-size: 12px;
+}
+
+.notification-list .profile-dropdown {
+    width: 175px;
+
+}
+
 .cir-img{
     width: 16px;
     height: 24px;
