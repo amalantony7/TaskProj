@@ -14,8 +14,8 @@
 
                 <!-- Create Table Button-->
                 <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
-                    <button type="button" class="btn btn-outline-primary waves-effect waves-light"><span
-                            class="ti-plus"></span> Create Table</button>
+                    <button type="button" (click) = "createTable()" class="btn btn-outline-primary waves-effect waves-light"><span
+                            class="ti-plus" ></span> Create Table</button>
                 </li>
 
                 <!-- User Profile-->
@@ -46,7 +46,7 @@
 
             <ul class="list-inline menu-left mb-0">
                 <li class="float-left">
-                    <h4 class="header-li"> {{tableName[0]}}</h4>
+                    <h4 class="header-li"> {{boardName[0]}}</h4>
                 </li>
             </ul>
 
@@ -69,7 +69,7 @@
                         <span> BOARDS </span>
                     </a>
                 <li>
-                <li *ngFor="let tabName of tableName">
+                <li *ngFor="let tabName of boardName">
                     <a class="waves-effect" href="" routerLink="blankboard" routerLinkActive="active" >
                         <a class="mdi mdi-delete float-right"></a>
                         <div class="nav-side-list">
@@ -87,4 +87,5 @@
     <!-- Sidebar -left -->
 
 </div>
+<!-- <app-blank-board [parentData]= "tableName[0]"></app-blank-board> -->
 <router-outlet></router-outlet>

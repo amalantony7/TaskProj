@@ -20,6 +20,7 @@ import { ViewModeDirective } from './editable/view-mode-directive';
 import { EditModeDirective } from './editable/edit-mode-directive';
 import { FocusableDirective } from './editable/focusable-directive';
 import { EditableOnEnterDirective } from './editable/editable-on-enter-directive';
+import { CreateTableDialogComponent } from './dialog/create-table-dialog/create-table-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,9 +36,10 @@ import { EditableOnEnterDirective } from './editable/editable-on-enter-directive
     ViewModeDirective,
     EditModeDirective,
     FocusableDirective,
-    EditableOnEnterDirective
+    EditableOnEnterDirective,
+    CreateTableDialogComponent
   ],
-  entryComponents: [CreateBoardDialogComponent],
+  entryComponents: [CreateBoardDialogComponent, CreateTableDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

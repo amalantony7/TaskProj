@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatSort } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { startWith, map } from 'rxjs/operators';
 import { PeriodicElement } from 'src/app/models/periodic';
 import { CoreService } from 'src/app/services/core.service';
+import { HeaderComponent } from '../header/header.component';
 
 
 
@@ -30,6 +31,7 @@ export class BlankBoardComponent implements OnInit {
   data = Object.assign(this.core.list);
   selection = new SelectionModel<PeriodicElement[]>(true, []);
 
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
 
@@ -41,6 +43,7 @@ export class BlankBoardComponent implements OnInit {
   public collapsed = false;
 
   constructor(private core: CoreService) { }
+
 
   ngOnInit() {
     this.core.list$.subscribe(res => {
@@ -128,7 +131,6 @@ export class BlankBoardComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-
 
 
 }
