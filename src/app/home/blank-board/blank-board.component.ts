@@ -7,7 +7,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { startWith, map } from 'rxjs/operators';
 import { PeriodicElement } from 'src/app/models/periodic';
 import { CoreService } from 'src/app/services/core.service';
-import { HeaderComponent } from '../header/header.component';
 
 
 
@@ -31,6 +30,7 @@ export class BlankBoardComponent implements OnInit {
   data = Object.assign(this.core.list);
   selection = new SelectionModel<PeriodicElement[]>(true, []);
 
+  groups=['group 1', 'group 2'];
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
