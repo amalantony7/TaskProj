@@ -148,11 +148,17 @@ img {
     color: initial;
     font-family: "Poppins", sans-serif !important;
     font-weight: 900;
+
 }
 
 .mat-header-cell {
+    font-size: 14.5px !important;
     color: inherit;
     font-family: "Poppins", sans-serif !important;
+    padding: 0;
+    border-bottom-style: none !important;
+    border-top-style: none !important;
+    margin-top: 10px;
 }
 
   mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
@@ -175,15 +181,16 @@ img {
     padding-top: 10px;
     padding-bottom: 10px;
     font-family: "Poppins", sans-serif !important;
-    
+
 }
   
 
-  .mat-cell, .mat-footer-cell, .mat-header-cell {
+  .mat-cell, .mat-footer-cell {
     padding: 0;
     border-bottom-style: none !important;
     border-top-style: none !important;
     margin-top: 10px;
+    font-size: 13.5px !important;
 }
 
 .mat-footer-row {
@@ -194,11 +201,48 @@ img {
 .thumb-md {
     height: 32px;
     width: 32px;
-    margin-left: 3px;
+    margin-left: 0.5px;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    padding-bottom: 1.25em;
+    width: 130px;;
+}
+
+.flex-large{
+    width : 100% !important;
+}
+
+.input-indicator {
+    position: relative;
+    width: 8px;
+    height: 100%;
+    overflow: hidden;
+    flex: 0 0 6px;
+    display: flex;
+    border-bottom: 1px solid white;
+    height: 51px;
+    background-color: #30419b !important;
 }
 
 
 
+.add-input {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    border-radius: 0;
+    border: 1px solid #e6e9ef;
+    height: 50px;
+    background: #fff;
+    font-size: 13px;
+    outline: none;
+    font-weight: 400;
+    padding-left: 20px;
+    padding-top: 5px;
+    text-align: left;
+    font-family: "Poppins", sans-serif !important;
+    border-right: none;
+}
 
 
 

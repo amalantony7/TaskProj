@@ -104,7 +104,7 @@ const MaterialComponents = [
   MatSelectModule,
   MatAutocompleteModule,
   MatSortModule,
-  MatCheckboxModule
+  MatCheckboxModule,
 ]
 
 @NgModule({

@@ -5,14 +5,15 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <mat-card class="card m-b-30 mt-4" *ngFor = "let group of groups">
+                    <mat-card class="card m-b-30 mt-4" *ngFor="let group of groups">
                         <mat-card-content class="card-body">
                             <div class="page-title-box pt-1">
                                 <div class="row align-items-center">
                                     <div class="col-sm-4">
                                         <div class="dropdown notification-list">
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                                                <h4 class="mt-0 header-title">{{group}}<i class="fas fa-chevron-down"></i>
+                                                <h4 class="mt-0 header-title">{{group}}<i
+                                                        class="fas fa-chevron-down"></i>
                                                 </h4>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dr-men-right">
@@ -22,7 +23,7 @@
                                                         src="assets/icons/unfold_more-24px.svg">
                                                     Collapase this group</a>
                                                 <a class="dropdown-item" *ngIf="collapsed===true"
-                                                    (click)="collapsed=false"><span class= "mdi mdi-arrow-expand"></span>
+                                                    (click)="collapsed=false"><span class="mdi mdi-arrow-expand"></span>
                                                     Expand this group</a>
                                                 <a class="dropdown-item" href="#"><i class="mdi mdi-pencil-outline"></i>
                                                     Rename group</a>
@@ -89,114 +90,149 @@
                             <div [style.display]="collapsed? 'none' : 'block'">
                                 <div class="table-responsive">
 
-                                    <table  mat-table [dataSource]="dataSource" matSort
-                                        class="table table-hover">
+                                    <table mat-table [dataSource]="dataSource" matSort class="table table-hover">
+                                        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+                                            <ng-container *ngIf="column === 'select';else elseBlock" sticky>
+                                                <mat-header-cell *matHeaderCellDef>
+                                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                        [checked]="selection.hasValue() && isAllSelected()"
+                                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                        [aria-label]="checkboxLabel()">
+                                                    </mat-checkbox>
+                                                </mat-header-cell>
+                                            </ng-container>
+                                            <ng-template #elseBlock>
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{column}}
+                                                </mat-header-cell>
+                                            </ng-template>
 
-                                        <ng-container matColumnDef="select">
-                                            <mat-header-cell *matHeaderCellDef>
-                                                <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                    [checked]="selection.hasValue() && isAllSelected()"
-                                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                    [aria-label]="checkboxLabel()">
-                                                </mat-checkbox> -->
-                                            </mat-header-cell>
-                                            <mat-cell *matCellDef="let row">
-                                                <mat-checkbox (click)="$event.stopPropagation()"
-                                                    (change)="$event ? selection.toggle(row) : null"
-                                                    [checked]="selection.isSelected(row)"
-                                                    [aria-label]="checkboxLabel(row)">
-                                                </mat-checkbox>
-                                            </mat-cell>
-                                        </ng-container>
 
-                                        <!-- Position Column -->
-                                        <ng-container matColumnDef="position">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
-                                            <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
-                                        </ng-container>
-
-                                        <!-- Name Column -->
-                                        <ng-container matColumnDef="name">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
                                             <mat-cell *matCellDef="let element;let index = index">
-                                                <editable (update)="updateField(index, 'name')">
-                                                    <ng-template viewMode>
-                                                        {{element.name}}
-                                                    </ng-template>
-                                                    <ng-template editMode>
-                                                        <mat-form-field class="example-full-width">
-                                                            <input matInput
-                                                                [class.is-invalid]="getControl(index , 'name').invalid && getControl(index , 'name').touched"
-                                                                [formControl]="getControl(index, 'name')">
-                                                            <mat-error
-                                                                *ngIf="getControl(index, 'name').hasError('required')">
-                                                                This Field is required!
-                                                            </mat-error>
-                                                        </mat-form-field>
-                                                        <!-- <input  [formControl]="getControl(index, 'name')" focusable editableOnEnter> -->
-                                                    </ng-template>
-                                                </editable>
-                                            </mat-cell>
-
-
-                                        </ng-container>
-
-                                        <!-- Weight Column -->
-                                        <ng-container matColumnDef="weight">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Weight
-                                            </mat-header-cell>
-                                            <mat-cell *matCellDef="let element;let index = index">
-                                                <span class="badge badge-success">
-                                                    <editable (update)="updateField(index, 'weight')">
+                                                <ng-container *ngIf="column === 'select'">
+                                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                        (change)="$event ? selection.toggle(element) : null"
+                                                        [checked]="selection.isSelected(element)"
+                                                        [aria-label]="checkboxLabel(element)">
+                                                    </mat-checkbox>
+                                                </ng-container>
+                                                <ng-container *ngIf="column === 'text'">
+                                                    <editable (update)="updateField(index, 'text')">
                                                         <ng-template viewMode>
-                                                            {{element.weight}}
+                                                            {{element[column]}}
                                                         </ng-template>
                                                         <ng-template editMode>
                                                             <mat-form-field class="example-full-width">
                                                                 <input matInput
-                                                                    [formControl]="getControl(index, 'weight')">
-                                                            </mat-form-field>
-                                                        </ng-template>
-                                                    </editable>
-                                                </span>
-                                            </mat-cell>
-                                        </ng-container>
-
-                                        <!-- Symbol Column -->
-                                        <ng-container matColumnDef="symbol">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header> Symbol
-                                            </mat-header-cell>
-                                            <mat-cell *matCellDef="let element;let index = index">
-                                                <div>
-                                                    <img src="assets/images/users/user-2.jpg" alt=""
-                                                        class="thumb-md img-fluid rounded-circle mr-2">
-                                                    <editable (update)="updateField(index, 'symbol')">
-                                                        <ng-template viewMode>
-                                                            {{element.symbol}}
-                                                        </ng-template>
-                                                        <ng-template editMode>
-                                                            <mat-form-field class="example-full-width">
-                                                                <input matInput
-                                                                    [formControl]="getControl(index, 'symbol')"
-                                                                    focusable editableOnEnter>
+                                                                    [class.is-invalid]="getControl(index , 'text').invalid && getControl(index , 'text').touched"
+                                                                    [formControl]="getControl(index, 'text')"
+                                                                    editableOnEnter>
                                                                 <mat-error
-                                                                    *ngIf="getControl(index, 'symbol').hasError('required')">
+                                                                    *ngIf="getControl(index, 'text').hasError('required')">
                                                                     This Field is required!
                                                                 </mat-error>
                                                             </mat-form-field>
                                                         </ng-template>
                                                     </editable>
-                                                </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="column === 'date'">
+                                                    <editable (update)="updateField(index, 'date')">
+                                                        <ng-template viewMode>
+                                                            {{element[column] | date:'dd-MM-yyyy'}}
+                                                        </ng-template>
+                                                        <ng-template editMode>
+                                                            <mat-form-field>
+                                                                <input matInput [matDatepicker]="picker"
+                                                                    [formControl]="getControl(index, 'date')"
+                                                                    placeholder="dd-mm-yy" focusable editableOnEnter>
+                                                                <mat-datepicker-toggle matSuffix [for]="picker">
+                                                                </mat-datepicker-toggle>
+                                                                <mat-datepicker #picker></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </ng-template>
+                                                    </editable>
+                                                </ng-container>
+                                                <ng-container *ngIf="column === 'peoples'">
+                                                    <editable (update)="updateField(index, 'peoples')">
+                                                        <ng-template viewMode>
+                                                            <div>
+                                                                <img src="assets/images/users/user-2.jpg" alt=""
+                                                                    class="thumb-md rounded-circle mr-2">
+                                                                {{element[column]}}
+                                                            </div>
+
+                                                        </ng-template>
+                                                        <ng-template editMode>
+                                                            <mat-form-field class="example-full-width">
+                                                                <input matInput
+                                                                    [formControl]="getControl(index, 'peoples')"
+                                                                    focusable editableOnEnter>
+                                                                <mat-error
+                                                                    *ngIf="getControl(index, 'peoples').hasError('required')">
+                                                                    This Field is required!
+                                                                </mat-error>
+                                                            </mat-form-field>
+                                                        </ng-template>
+                                                    </editable>
+                                                </ng-container>
+                                                <ng-container *ngIf="column === 'status'">
+                                                    <editable (update)="updateField(index, 'status')">
+                                                        <ng-template viewMode>
+                                                            {{element[column]}}
+                                                        </ng-template>
+                                                        <ng-template editMode>
+                                                            <mat-chip-list>
+                                                                <select class="form-control" [(value)]="selected"
+                                                                    [formControl]="getControl(index, 'status')"
+                                                                    focusable editableOnEnter>
+                                                                    <option value="">Select</option>
+                                                                    <option value="Delivered">
+                                                                        <mat-chip color="primary" selected>Primary fish
+                                                                        </mat-chip>
+                                                                    </option>
+                                                                    <option value="Pending">
+                                                                        <mat-chip color="primary" selected>Primary fish
+                                                                        </mat-chip>
+                                                                    </option>
+                                                                    <option value="Cancel">
+                                                                        <mat-chip color="primary" selected>Primary fish
+                                                                        </mat-chip>
+                                                                    </option>
+                                                                </select>
+                                                            </mat-chip-list>
+                                                        </ng-template>
+                                                    </editable>
+                                                </ng-container>
+                                                <ng-container *ngIf="column === 'numbers'">
+                                                    <editable (update)="updateField(index, 'numbers')">
+                                                        <ng-template viewMode>
+                                                            {{element[column]}}
+                                                        </ng-template>
+                                                        <ng-template editMode>
+                                                            <mat-form-field class="example-full-width">
+                                                                <input matInput
+                                                                    [formControl]="getControl(index, 'numbers')"
+                                                                    focusable editableOnEnter>
+                                                                <mat-error
+                                                                    *ngIf="getControl(index, 'numbers').hasError('required')">
+                                                                    This Field is required!
+                                                                </mat-error>
+                                                            </mat-form-field>
+                                                        </ng-template>
+                                                    </editable>
+                                                </ng-container>
                                             </mat-cell>
+
                                         </ng-container>
-
-                                        <mat-header-row *matHeaderRowDef="displayedColumns">
-                                        </mat-header-row>
-                                        <mat-row *matRowDef="let row; columns: displayedColumns;"
+                                        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+                                        <mat-row *matRowDef="let row; columns: columnsToDisplay;"
                                             (click)="selection.toggle(row)"></mat-row>
+
                                     </table>
-
-
+                                    <div class="d-lg-inline-flex flex-large pt-2 bd-highlight">
+                                        <div class="input-indicator">
+                                        </div>
+                                        <input type="text" class="add-input" placeholder="+  Add">
+                                    </div>
 
                                     <!-- 
                                     <thead>

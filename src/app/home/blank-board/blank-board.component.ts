@@ -24,62 +24,67 @@ import { CoreService } from 'src/app/services/core.service';
 })
 export class BlankBoardComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = this.core.listHeader;
+  columnsToDisplay: string[] = this.displayedColumns.slice();
   dataSource: any;
   controls: FormArray;
+  headers : FormArray;
+
   data = Object.assign(this.core.list);
-  selection = new SelectionModel<PeriodicElement[]>(true, []);
+  selected = "";
 
   groups=['group 1', 'group 2'];
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-
-  options: string[] = this.core.list.map(e => e.name);
+  options: string[] = this.core.list.map(e => e.peoples);
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
 
 
   public collapsed = false;
 
+  selection = new SelectionModel<PeriodicElement[]>(true, []);
+
+
+  private sort : MatSort
+  @ViewChild(MatSort, { static: false }) set matSort(ms : MatSort){
+    this.sort = ms;
+    this.dataSource.sort = this.sort;
+  }
+  
+
   constructor(private core: CoreService) { }
 
 
   ngOnInit() {
+    
     this.core.list$.subscribe(res => {
       this.dataSource = new MatTableDataSource(res)
-    })
+    });
 
     const toGroups = this.core.list$.value.map(entity => {
       return new FormGroup({
-        position: new FormControl(entity.position, [Validators.required]),
-        name: new FormControl(entity.name, [Validators.required]),
-        weight: new FormControl(entity.weight, Validators.required),
-        symbol: new FormControl(entity.symbol, Validators.required)
-      }, { updateOn: "blur" });
+        text: new FormControl(entity.text, [Validators.required]),
+        status: new FormControl(entity.status, [Validators.required]),
+        date: new FormControl(entity.date, Validators.required),
+        peoples: new FormControl(entity.peoples, Validators.required),
+        numbers: new FormControl(entity.numbers, Validators.required), 
+      }, { updateOn: "blur" }); 
     });
+
+    
+    
 
     this.controls = new FormArray(toGroups);
 
     this.dataSource.sort = this.sort;
 
     this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-
+    .pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
   }
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
 
   updateField(index, field) {
     const control = this.getControl(index, field);
@@ -109,7 +114,6 @@ export class BlankBoardComponent implements OnInit {
     return this.controls.at(index).get(fieldName) as FormControl;
   }
 
-
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -130,6 +134,22 @@ export class BlankBoardComponent implements OnInit {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
+
+ 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+
+  getTotalCost() {
+    return this.core.list.map(t => t.numbers).reduce((acc, value) => acc + value, 0);
   }
 
 

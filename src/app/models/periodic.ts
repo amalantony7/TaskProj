@@ -1,6 +1,7 @@
 export interface PeriodicElement {
-    name: string;
-    position: number;
-    weight: number;
-    symbol: string;
+    status: string;
+    text: string;
+    peoples: string;
+    date: Date;
+    numbers : number
   }
