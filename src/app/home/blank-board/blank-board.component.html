@@ -91,8 +91,9 @@
                                 <div class="table-responsive">
 
                                     <table mat-table [dataSource]="dataSource" matSort class="table table-hover">
-                                        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-                                            <ng-container *ngIf="column === 'select';else elseBlock" sticky>
+                                        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns;let i = index">
+                                            <ng-container>
+                                                <ng-container *ngIf="column === 'select';else elseBlock" sticky>
                                                 <mat-header-cell *matHeaderCellDef>
                                                     <mat-checkbox (change)="$event ? masterToggle() : null"
                                                         [checked]="selection.hasValue() && isAllSelected()"
@@ -102,8 +103,29 @@
                                                 </mat-header-cell>
                                             </ng-container>
                                             <ng-template #elseBlock>
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{column}}
-                                                </mat-header-cell>
+                                                <ng-container *ngIf="column === 'star';else elseCase">
+
+                                                        <mat-header-cell *matHeaderCellDef stickyend>
+                                                                <mat-icon>more_vert</mat-icon>
+                                                        </mat-header-cell>
+                                                </ng-container>
+                                                <ng-template #elseCase>
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                       
+                                                                <editable (update)="updateHeader(index,column)">
+                                                                    <ng-template viewMode>
+                                                                          {{column}}
+                                                                    </ng-template>
+                                                                    <ng-template editMode>
+                                                                            <mat-form-field class="example-full-width">
+                                                                                    <input matInput
+                                                                                        [formControl]="getControl(index, column)"
+                                                                                        editableOnEnter>
+                                                                                </mat-form-field>
+                                                                    </ng-template>
+                                                                </editable>
+                                                            </mat-header-cell>
+                                                </ng-template>
                                             </ng-template>
 
 
@@ -116,7 +138,7 @@
                                                     </mat-checkbox>
                                                 </ng-container>
                                                 <ng-container *ngIf="column === 'text'">
-                                                    <editable (update)="updateField(index, 'text')">
+                                                    <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             {{element[column]}}
                                                         </ng-template>
@@ -135,7 +157,7 @@
                                                     </editable>
                                                 </ng-container>
                                                 <ng-container *ngIf="column === 'date'">
-                                                    <editable (update)="updateField(index, 'date')">
+                                                    <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             {{element[column] | date:'dd-MM-yyyy'}}
                                                         </ng-template>
@@ -152,7 +174,7 @@
                                                     </editable>
                                                 </ng-container>
                                                 <ng-container *ngIf="column === 'peoples'">
-                                                    <editable (update)="updateField(index, 'peoples')">
+                                                    <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             <div>
                                                                 <img src="assets/images/users/user-2.jpg" alt=""
@@ -175,7 +197,7 @@
                                                     </editable>
                                                 </ng-container>
                                                 <ng-container *ngIf="column === 'status'">
-                                                    <editable (update)="updateField(index, 'status')">
+                                                    <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             {{element[column]}}
                                                         </ng-template>
@@ -203,7 +225,7 @@
                                                     </editable>
                                                 </ng-container>
                                                 <ng-container *ngIf="column === 'numbers'">
-                                                    <editable (update)="updateField(index, 'numbers')">
+                                                    <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             {{element[column]}}
                                                         </ng-template>
@@ -220,7 +242,10 @@
                                                         </ng-template>
                                                     </editable>
                                                 </ng-container>
+                                                <ng-container *ngIf="column === 'star'">
+                                                </ng-container>
                                             </mat-cell>
+                                            </ng-container>
 
                                         </ng-container>
                                         <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>

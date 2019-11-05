@@ -28,7 +28,7 @@ export class BlankBoardComponent implements OnInit {
   columnsToDisplay: string[] = this.displayedColumns.slice();
   dataSource: any;
   controls: FormArray;
-  headers : FormArray;
+  headerControls : FormArray;
 
   data = Object.assign(this.core.list);
   selected = "";
@@ -72,10 +72,15 @@ export class BlankBoardComponent implements OnInit {
       }, { updateOn: "blur" }); 
     });
 
-    
+    const toHeaderGroups = this.core.listHeader$.value.forEach(elements=>{
+      return new FormGroup({
+        textHeader : new FormControl(elements)
+      }, { updateOn : 'blur'});
+    });
     
 
     this.controls = new FormArray(toGroups);
+  
 
     this.dataSource.sort = this.sort;
 
@@ -87,7 +92,7 @@ export class BlankBoardComponent implements OnInit {
   }
 
   updateField(index, field) {
-    const control = this.getControl(index, field);
+    let control = this.getControl(index, field);
     if (control.valid) {
       this.core.update(index, field, control.value);
       this.dataSource.sort = this.sort;
@@ -112,6 +117,10 @@ export class BlankBoardComponent implements OnInit {
   getControl(index, fieldName) {
     const a = this.controls.at(index).get(fieldName) as FormControl;
     return this.controls.at(index).get(fieldName) as FormControl;
+  }
+
+  getHeaderControl(index,fieldName){
+    return this.headerControls.at(index).get(fieldName) as FormControl;
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

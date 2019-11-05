@@ -8,7 +8,7 @@ import { PeriodicElement } from '../models/periodic';
 })
 export class CoreService {
 
-  listHeader: string[] = ['select', 'text', 'status', 'date', 'numbers' , 'peoples'];
+  listHeader: string[] = ['select', 'text', 'status', 'date', 'numbers' , 'peoples','star'];
 
   list: PeriodicElement[] = [
     { text : "Itemname 1" , status : 'Delivered' , date : new Date("2017-01-04") , numbers : 20123 , peoples : "Rosemary"},
@@ -16,7 +16,7 @@ export class CoreService {
   ];
   list$: BehaviorSubject<PeriodicElement[]> = new BehaviorSubject(this.list);
 
-
+  listHeader$ : BehaviorSubject<string[]> = new BehaviorSubject(this.listHeader);
 
   constructor() {
   }
