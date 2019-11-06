@@ -106,7 +106,16 @@
                                                 <ng-container *ngIf="column === 'star';else elseCase">
 
                                                         <mat-header-cell *matHeaderCellDef stickyend>
-                                                                <mat-icon>more_vert</mat-icon>
+                                                            <div class="table-drp dropdown">
+                                                                <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                  <span class="icon-plus"></span>
+                                                                </a>
+                                                                <div class="table-drp-men dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                  <a class="dropdown-item" href="#">Action</a>
+                                                                  <a class="dropdown-item" href="#">Another action</a>
+                                                                  <a class="dropdown-item" href="#">Something else here</a>
+                                                                </div>
+                                                              </div>
                                                         </mat-header-cell>
                                                 </ng-container>
                                                 <ng-template #elseCase>

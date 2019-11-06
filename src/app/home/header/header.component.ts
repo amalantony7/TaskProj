@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { CreateBoardDialogComponent } from '../../dialog/create-board-dialog/create-board-dialog.component';
 import { CreateTableDialogComponent } from 'src/app/dialog/create-table-dialog/create-table-dialog.component';
+import { BoardService } from 'src/app/services/board.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,18 +14,50 @@ import { CreateTableDialogComponent } from 'src/app/dialog/create-table-dialog/c
 })
 export class HeaderComponent implements OnInit {
 
-  public userImg = "";
-  public userName = "Amal";
-  public boardName: Array<any> = ["Blank Board"];
-  public tableName: Array<any> = ["Group 1"];
+  public userDetails : Array<any> = [];
+  public boardName: Array<any> = [];
+  public tableName: Array<any> = ["group 1"];
   bName : string;
   tName : string;
 
-  initName: Array<string> = this.userName.split('');
+  // initName: Array<string> = this.userName.split('');
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog ,
+              private _boardService : BoardService ,
+              private _authService : AuthService , 
+              private _router : Router) { }
 
   ngOnInit() {
+    this._boardService.getUserDetails()
+                      .subscribe(
+                        res => {
+                          console.log("user Details", res);
+                          this.userDetails = res;
+                          console.log(this.userDetails);
+                        },
+                        err => {
+                          if (err instanceof HttpErrorResponse){
+                            if (err.status === 401){
+                              console.log(err);
+                              this._authService.logoutUser();
+                            }
+                          }
+                          this._router.navigate(['/login']);
+                        }
+                      )
+
+
+    this._boardService.getBoardList()
+                        .subscribe(
+                          res => {
+                            console.log("boardList", res);
+                            this.boardName = res;
+                          },
+                          err => {
+                              console.log(err);
+                          }
+                        )
+
   }
 
   addNewBoard() {

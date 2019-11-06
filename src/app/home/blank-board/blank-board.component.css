@@ -107,8 +107,10 @@ img {
 
 
 .table-responsive {
-    overflow: auto !important;
+    
     max-height: 400px;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
 }
 
 
@@ -118,7 +120,7 @@ img {
     margin-bottom: 10px;
     font-family: "Poppins", sans-serif !important;
     background: #F9F9F9 !important;
-    overflow: initial !important;
+    overflow: visible !important;
   }
 
 
@@ -159,6 +161,7 @@ img {
     border-bottom-style: none !important;
     border-top-style: none !important;
     margin-top: 10px;
+    overflow: visible !important;
 }
 
   mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
@@ -197,6 +200,17 @@ img {
     font-weight: 500;
     font-family: "Poppins", sans-serif !important;
   }
+
+.table-drp{
+    margin-left: 60px;
+    margin-top: 8px;
+    position: sticky;
+    position: -webkit-sticky;
+}  
+
+.table-drp-men{
+    transform: translate3d(-148px, 23px, 0px) !important;
+}
 
 .thumb-md {
     height: 32px;

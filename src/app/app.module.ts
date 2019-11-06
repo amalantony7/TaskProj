@@ -9,7 +9,7 @@ import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './home/header/header.component';
 import { BlankBoardComponent } from './home/blank-board/blank-board.component';
 import { AvatarModule} from 'ngx-avatar';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -22,6 +22,11 @@ import { EditModeDirective } from './editable/edit-mode-directive';
 import { FocusableDirective } from './editable/focusable-directive';
 import { EditableOnEnterDirective } from './editable/editable-on-enter-directive';
 import { CreateTableDialogComponent } from './dialog/create-table-dialog/create-table-dialog.component';
+import { LoaderComponent } from './loader/loader.component';
+import { CoreService } from './services/core.service';
+import { AuthGuard } from './Guards/auth.guard';
+import { BoardService } from './services/board.service';
+import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +43,8 @@ import { CreateTableDialogComponent } from './dialog/create-table-dialog/create-
     EditModeDirective,
     FocusableDirective,
     EditableOnEnterDirective,
-    CreateTableDialogComponent
+    CreateTableDialogComponent,
+    LoaderComponent
   ],
   entryComponents: [CreateBoardDialogComponent, CreateTableDialogComponent],
   imports: [
@@ -51,7 +57,14 @@ import { CreateTableDialogComponent } from './dialog/create-table-dialog/create-
     ReactiveFormsModule,
     FormsModule
   ],
-  providers: [AuthService],
+  providers: [AuthService , CoreService , 
+              AuthGuard , BoardService ,
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass : TokenInterceptorService, 
+      multi : true
+    } , 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

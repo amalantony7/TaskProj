@@ -14,8 +14,9 @@
 
                 <!-- Create Table Button-->
                 <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
-                    <button type="button" (click) = "createTable()" class="btn btn-outline-primary waves-effect waves-light"><span
-                            class="ti-plus" ></span> Create Table</button>
+                    <button type="button" (click)="createTable()"
+                        class="btn btn-outline-primary waves-effect waves-light"><span class="ti-plus"></span> Create
+                        Table</button>
                 </li>
 
                 <!-- User Profile-->
@@ -23,10 +24,10 @@
                     <div class="dropdown notification-list nav-pro-img">
                         <a class="dropdown-toggle nav-link nav-user" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="false" aria-expanded="false">
-                            <img *ngIf="userImg; else elseBlock" [src]="userImg" class="rounded-circle">
+                            <img *ngIf="userDetails.avatar; else elseBlock" [src]="userDetails.avatar" class="rounded-circle">
                             <ng-template #elseBlock>
                                 <img class="rounded-circle"
-                                    src="https://ui-avatars.com/api/?name={{initName[0].toUpperCase()}}&background=0D8ABC&color=fff">
+                                    src="https://ui-avatars.com/api/?name={{userDetails.email.charAt(0)}}&background=0D8ABC&color=fff">
                             </ng-template>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
@@ -35,8 +36,8 @@
                                 Edit Profile Picture</a>
                             <a class="dropdown-item" href="#" routerLink="/resetpassword" routerLinkActive="active"><i
                                     class="mdi mdi-lock"></i> Reset Password</a>
-                            <a class="dropdown-item" href="#" routerLink="/login" routerLinkActive="active"><img
-                                    class="drop-img" src="assets/icons/logout.svg">
+                            <a class="dropdown-item" (click)="_authService.logoutUser()"><img class="drop-img"
+                                    src="assets/icons/logout.svg">
                                 Logout</a>
                         </div>
                     </div>
@@ -46,7 +47,7 @@
 
             <ul class="list-inline menu-left mb-0">
                 <li class="float-left">
-                    <h4 class="header-li"> {{boardName[0]}}</h4>
+                    <h4 class="header-li"> {{boardName[0].board_name}}</h4>
                 </li>
             </ul>
 
@@ -65,15 +66,16 @@
             <ul class="metismenu" id="side-menu">
                 <li>
                     <a class="menu-title">
-                        <img (click)="addNewBoard()" src="../assets/icons/Group 41.svg" class="cir-img pt-1 float-right">
+                        <img (click)="addNewBoard()" src="../assets/icons/Group 41.svg"
+                            class="cir-img pt-1 float-right">
                         <span> BOARDS </span>
                     </a>
                 <li>
                 <li *ngFor="let tabName of boardName">
-                    <a class="waves-effect" href="" routerLink="blankboard" routerLinkActive="active" >
+                    <a class="waves-effect" href="" routerLink="blankboard" routerLinkActive="active">
                         <a class="mdi mdi-delete float-right"></a>
                         <div class="nav-side-list">
-                            <span>{{tabName}}</span>
+                            <span>{{tabName.board_name}}</span>
                         </div>
                     </a>
                 </li>
