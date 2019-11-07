@@ -144,5 +144,17 @@
     margin-left: 58px;
 }
 
+.side-menu{
+    overflow-y: auto !important;
+}
+.side-menu::-webkit-scrollbar {
+    width: 1em;
+}
+ 
 
+ 
+.side-menu::-webkit-scrollbar-thumb {
+  background-color: rgb(18, 98, 129);
+  outline: 1px solid slategrey;
+}
 

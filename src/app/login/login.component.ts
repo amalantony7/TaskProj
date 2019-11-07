@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-
+import { MatDialog } from '@angular/material';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,7 +14,10 @@ export class LoginComponent implements OnInit {
   loginForm : FormGroup;
   public emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  constructor(private fb : FormBuilder , private _auth : AuthService , private _router : Router) { }
+  constructor(private fb : FormBuilder ,
+              private _auth : AuthService ,
+              private _router : Router,
+              public dialog : MatDialog) { }
 
   get email(){
     return this.loginForm.get('email');

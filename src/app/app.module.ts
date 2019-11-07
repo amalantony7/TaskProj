@@ -27,6 +27,7 @@ import { CoreService } from './services/core.service';
 import { AuthGuard } from './Guards/auth.guard';
 import { BoardService } from './services/board.service';
 import { TokenInterceptorService } from './interceptors/token-interceptor.service';
+import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.component';
 
 @NgModule({
   declarations: [
@@ -44,9 +45,10 @@ import { TokenInterceptorService } from './interceptors/token-interceptor.servic
     FocusableDirective,
     EditableOnEnterDirective,
     CreateTableDialogComponent,
-    LoaderComponent
+    LoaderComponent,
+    LoginDialogComponent
   ],
-  entryComponents: [CreateBoardDialogComponent, CreateTableDialogComponent],
+  entryComponents: [CreateBoardDialogComponent, CreateTableDialogComponent , LoginDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -169,6 +169,16 @@ img {
     
 }
 
+.table-drp-item{
+    border-bottom : 0.05px solid rgb(239, 239, 240);
+}
+
+.drp-img{
+    width: 15px;
+    margin-right: 25px;
+    height: 15px;
+  }
+
 
 .mat-row:hover {
     background-color: rgb(222, 228, 230);
@@ -196,6 +206,24 @@ img {
     font-size: 13.5px !important;
 }
 
+.table-input-control{
+    display: block;
+    width: 100px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: rgb(255, 255, 255);
+    background-clip: padding-box;
+    border: 0.5px dotted rgb(104, 103, 103);
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    font-size: 13px;
+}
+
+
 .mat-footer-row {
     font-weight: 500;
     font-family: "Poppins", sans-serif !important;
@@ -209,7 +237,7 @@ img {
 }  
 
 .table-drp-men{
-    transform: translate3d(-148px, 23px, 0px) !important;
+    transform: translate3d(-150px, 20px, 0px) !important;
 }
 
 .thumb-md {

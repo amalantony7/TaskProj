@@ -24,7 +24,8 @@
                     <div class="dropdown notification-list nav-pro-img">
                         <a class="dropdown-toggle nav-link nav-user" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="false" aria-expanded="false">
-                            <img *ngIf="userDetails.avatar; else elseBlock" [src]="userDetails.avatar" class="rounded-circle">
+                            <img *ngIf="userDetails.avatar; else elseBlock" [src]="userDetails.avatar"
+                                class="rounded-circle">
                             <ng-template #elseBlock>
                                 <img class="rounded-circle"
                                     src="https://ui-avatars.com/api/?name={{userDetails.email.charAt(0)}}&background=0D8ABC&color=fff">
@@ -47,7 +48,7 @@
 
             <ul class="list-inline menu-left mb-0">
                 <li class="float-left">
-                    <h4 class="header-li"> {{boardName[0].board_name}}</h4>
+                    <h4 class="header-li">{{pageHeader}}</h4>
                 </li>
             </ul>
 
@@ -73,9 +74,9 @@
                 <li>
                 <li *ngFor="let tabName of boardName">
                     <a class="waves-effect" href="" routerLink="blankboard" routerLinkActive="active">
-                        <a class="mdi mdi-delete float-right"></a>
+                        <a class="mdi mdi-delete float-right" (click)=deleteBoards(tabName)></a>
                         <div class="nav-side-list">
-                            <span>{{tabName.board_name}}</span>
+                            <a (click)="changeHeader(tabName)">{{tabName.board_name}}</a>
                         </div>
                     </a>
                 </li>
@@ -89,5 +90,4 @@
     <!-- Sidebar -left -->
 
 </div>
-<!-- <app-blank-board [parentData]= "tableName[0]"></app-blank-board> -->
 <router-outlet></router-outlet>

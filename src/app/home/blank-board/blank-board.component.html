@@ -111,9 +111,7 @@
                                                                   <span class="icon-plus"></span>
                                                                 </a>
                                                                 <div class="table-drp-men dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                  <a class="dropdown-item" href="#">Action</a>
-                                                                  <a class="dropdown-item" href="#">Another action</a>
-                                                                  <a class="dropdown-item" href="#">Something else here</a>
+                                                                  <a class="table-drp-item dropdown-item" *ngFor= "let colHead of columnHeaders;let index = index"><img class="drp-img" [src]="colHead.icon">{{colHead.field}}</a>
                                                                 </div>
                                                               </div>
                                                         </mat-header-cell>
@@ -215,19 +213,7 @@
                                                                 <select class="form-control" [(value)]="selected"
                                                                     [formControl]="getControl(index, 'status')"
                                                                     focusable editableOnEnter>
-                                                                    <option value="">Select</option>
-                                                                    <option value="Delivered">
-                                                                        <mat-chip color="primary" selected>Primary fish
-                                                                        </mat-chip>
-                                                                    </option>
-                                                                    <option value="Pending">
-                                                                        <mat-chip color="primary" selected>Primary fish
-                                                                        </mat-chip>
-                                                                    </option>
-                                                                    <option value="Cancel">
-                                                                        <mat-chip color="primary" selected>Primary fish
-                                                                        </mat-chip>
-                                                                    </option>
+                                                                    
                                                                 </select>
                                                             </mat-chip-list>
                                                         </ng-template>
@@ -236,7 +222,12 @@
                                                 <ng-container *ngIf="column === 'numbers'">
                                                     <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
-                                                            {{element[column]}}
+                                                            <ng-container *ngIf="!element[column];else elseNumbers">
+                                                                <input class="table-input-control" type="text" [value] = "element[column]">
+                                                            </ng-container>
+                                                            <ng-template #elseNumbers>
+                                                                    <input class="table-input-control" type="text" [value] = "element[column]">
+                                                            </ng-template>
                                                         </ng-template>
                                                         <ng-template editMode>
                                                             <mat-form-field class="example-full-width">

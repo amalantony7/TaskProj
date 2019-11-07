@@ -9,14 +9,6 @@ import { PeriodicElement } from 'src/app/models/periodic';
 import { CoreService } from 'src/app/services/core.service';
 
 
-
-
-// const Table_Data : TableFields[] = [
-//   { text : "Item name 1" , status : "Delivered" , date : new Date("2/05/2015") , peoples : "Rosemary Rajan" , numbers : 201536 },
-//   { text : "Item name 2" , status : "Delivered" , date : new Date("4/10/2019") , peoples : "Romy Bobby" , numbers : 341536 }
-// ]
-
-
 @Component({
   selector: 'app-blank-board',
   templateUrl: './blank-board.component.html',
@@ -34,6 +26,14 @@ export class BlankBoardComponent implements OnInit {
   selected = "";
 
   groups=['group 1', 'group 2'];
+
+  columnHeaders = [
+    {"icon" : "/assets/icons/Group 11.png" , "field" : "Status"},
+    {"icon" : "/assets/icons/font.png" , "field" : "Text"},
+    {"icon" : "/assets/icons/group.png" , "field" : "Peoples"},
+    {"icon" : "/assets/icons/calendar.png" , "field" : "Date"},
+    {"icon" : "/assets/icons/Group 13.png" , "field" : "Numbers"}
+  ]
 
 
   options: string[] = this.core.list.map(e => e.peoples);

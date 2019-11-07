@@ -6,6 +6,8 @@ import { BoardService } from 'src/app/services/board.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserData, BoardDetails } from 'src/app/models/columnHeader';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-header',
@@ -14,49 +16,58 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  public userDetails : Array<any> = [];
-  public boardName: Array<any> = [];
+  public userDetails: UserData = {
+    first_name: "",
+    email: "",
+    avatar: ""
+  };
+  public boardName: Array<BoardDetails> = [];
   public tableName: Array<any> = ["group 1"];
-  bName : string;
-  tName : string;
+  public pageHeader = "";
+  bName: string;
+  boardhead: BoardDetails;
+  tName: string;
 
   // initName: Array<string> = this.userName.split('');
 
-  constructor(public dialog: MatDialog ,
-              private _boardService : BoardService ,
-              private _authService : AuthService , 
-              private _router : Router) { }
+  constructor(public dialog: MatDialog,
+    private _boardService: BoardService,
+    private _authService: AuthService,
+    private _router: Router,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this._boardService.getUserDetails()
-                      .subscribe(
-                        res => {
-                          console.log("user Details", res);
-                          this.userDetails = res;
-                          console.log(this.userDetails);
-                        },
-                        err => {
-                          if (err instanceof HttpErrorResponse){
-                            if (err.status === 401){
-                              console.log(err);
-                              this._authService.logoutUser();
-                            }
-                          }
-                          this._router.navigate(['/login']);
-                        }
-                      )
+      .subscribe(
+        res => {
+          this.userDetails = res;
+          console.log("user Details", res);
+
+        },
+        err => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 401) {
+              console.log(err);
+              this._authService.logoutUser();
+            }
+          }
+          this._router.navigate(['/login']);
+        }
+      )
 
 
     this._boardService.getBoardList()
-                        .subscribe(
-                          res => {
-                            console.log("boardList", res);
-                            this.boardName = res;
-                          },
-                          err => {
-                              console.log(err);
-                          }
-                        )
+      .subscribe(
+        res => {
+          this.boardName = res;
+          this.pageHeader = res[0].board_name ? res[0].board_name : "";
+          console.log("boardList", res);
+
+        },
+        err => {
+          console.log(err);
+        }
+      )
 
   }
 
@@ -72,33 +83,72 @@ export class HeaderComponent implements OnInit {
         null;
       } else {
         console.log("The dialog closed! : " + result);
-        this.bName = result;
-        this.boardName.push(this.bName);
+        this.boardhead = {
+          board_name: result
+        }
+        this._boardService.createBoard(this.boardhead)
+          .subscribe(
+            res => {
+              this.boardName.push(res)
+              this.snackBar.open("Board added successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+            },
+            error => {
+              console.log(error);
+              this.snackBar.open("Error while adding Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+            }
+          )
       }
     })
 
   }
 
+  deleteBoards(list) {
+    this.boardhead = {
+      id: list.id,
+      board_name: list.board_name
+    }
+    this._boardService.deleteBoard(this.boardhead)
+      .subscribe(
+        res => {
 
-  createTable(){
-   let dialogref =  this.dialog.open(CreateTableDialogComponent , {
-     data : { tname : this.tName}
-   });
-
-   dialogref.afterClosed().subscribe(result => {
-     if(result === false){
-       null;
-     }
-     else{
-       console.log("Dialog closed! " + result);
-        this.tName = result;
-        this.tableName.push(this.tName);
-        console.log(this.tableName);
-     }
-   })
+          this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
+        },
+        error => {
+          this.snackBar.open("Error while deleting Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+        }
+      )
   }
 
-  deleteBoard() {
+
+  createTable() {
+    let dialogref = this.dialog.open(CreateTableDialogComponent, {
+      data: { tname: this.tName }
+    });
+
+    dialogref.afterClosed().subscribe(result => {
+      if (result === false) {
+        null;
+      }
+      else {
+        console.log("Dialog closed! " + result);
+        this.tName = result;
+        this._boardService.createtable(this.tName)
+          .subscribe(
+            res => {
+              this.snackBar.open("Table created successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+            },
+            error => {
+              console.log(error);
+              this.snackBar.open("Error while creating Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+            }
+          )
+      }
+    })
+  }
+
+
+  changeHeader(item) {
+    this.pageHeader = item.board_name;
   }
 
 }

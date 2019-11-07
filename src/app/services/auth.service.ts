@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private _logUrl = "https://nescio.serveo.net/dashboard/rest-auth/login/";
+  private _logUrl = "https://227e58eb.ngrok.io/dashboard/rest-auth/login/";
 
   constructor(private _http : HttpClient ,
               private _router : Router) { }
