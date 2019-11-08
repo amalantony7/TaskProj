@@ -57,27 +57,14 @@
                                                         <mat-autocomplete class="auto-com" panelWidth="170px"
                                                             #auto="matAutocomplete">
                                                             <mat-option *ngFor="let option of filteredOptions | async"
-                                                                [value]="option">
+                                                                [value]="option.name">
                                                                 <div>
-                                                                    <img src="assets/images/users/user-2.jpg" alt=""
+                                                                    <img [src]="option.img" alt=""
                                                                         class="auto-img img-fluid rounded-circle mr-2">
-                                                                    {{option}}
+                                                                    {{option.name}}
                                                                 </div>
                                                             </mat-option>
                                                         </mat-autocomplete>
-
-
-
-                                                        <!-- <input type="search" class="dropdown-item rounded"
-                                                            placeholder="Enter name">
-                                                        <a class="dropdown-item" href="#"><img
-                                                                class="del-img img-fluid rounded-circle"
-                                                                src="assets/images/users/user-4.jpg" alt="">
-                                                            &nbsp;name</a>
-                                                        <a class="dropdown-item" href="#"><img
-                                                                class="del-img img-fluid rounded-circle"
-                                                                src="assets/images/users/user-4.jpg" alt="">
-                                                            &nbsp;name</a> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -107,9 +94,9 @@
 
                                                         <mat-header-cell *matHeaderCellDef stickyend>
                                                             <div class="table-drp dropdown">
-                                                                <a class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                  <span class="icon-plus"></span>
-                                                                </a>
+                                                                <button class="drp-btn dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                  <span><mat-icon>add_circle_outline</mat-icon></span>
+                                                                </button>
                                                                 <div class="table-drp-men dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                                   <a class="table-drp-item dropdown-item" *ngFor= "let colHead of columnHeaders;let index = index"><img class="drp-img" [src]="colHead.icon">{{colHead.field}}</a>
                                                                 </div>
@@ -147,7 +134,14 @@
                                                 <ng-container *ngIf="column === 'text'">
                                                     <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
-                                                            {{element[column]}}
+                                                                <ng-container *ngIf="!element[column];else elseText">
+                                                                        <button class="table-input-text-control"> Item Name </button>
+                                                                    </ng-container>
+                                                                    <ng-template #elseText>
+                                                                            {{element[column]}}
+                                                                    </ng-template>
+
+                                                            
                                                         </ng-template>
                                                         <ng-template editMode>
                                                             <mat-form-field class="example-full-width">
@@ -166,13 +160,19 @@
                                                 <ng-container *ngIf="column === 'date'">
                                                     <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
-                                                            {{element[column] | date:'dd-MM-yyyy'}}
+                                                            <ng-container *ngIf="!element[column];else elseDate">
+                                                                <button class="table-input-date-control">dd-mm-yy</button>
+                                                            </ng-container>
+                                                            <ng-template #elseDate>
+                                                                    {{element[column] | date:'dd-MM-yyyy'}}
+                                                            </ng-template>
+                                                            
                                                         </ng-template>
                                                         <ng-template editMode>
                                                             <mat-form-field>
                                                                 <input matInput [matDatepicker]="picker"
                                                                     [formControl]="getControl(index, 'date')"
-                                                                    placeholder="dd-mm-yy" focusable editableOnEnter>
+                                                                    placeholder="dd-mm-yy" editableOnEnter>
                                                                 <mat-datepicker-toggle matSuffix [for]="picker">
                                                                 </mat-datepicker-toggle>
                                                                 <mat-datepicker #picker></mat-datepicker>
@@ -184,38 +184,62 @@
                                                     <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             <div>
-                                                                <img src="assets/images/users/user-2.jpg" alt=""
+                                                                <img [src]="element[column]['img']" alt=""
                                                                     class="thumb-md rounded-circle mr-2">
-                                                                {{element[column]}}
+                                                                {{element[column]['name']}}
                                                             </div>
 
                                                         </ng-template>
                                                         <ng-template editMode>
-                                                            <mat-form-field class="example-full-width">
+                                                            <!-- <mat-form-field class="example-full-width">
                                                                 <input matInput
                                                                     [formControl]="getControl(index, 'peoples')"
-                                                                    focusable editableOnEnter>
+                                                                     editableOnEnter>
                                                                 <mat-error
                                                                     *ngIf="getControl(index, 'peoples').hasError('required')">
                                                                     This Field is required!
                                                                 </mat-error>
-                                                            </mat-form-field>
+                                                            </mat-form-field> -->
+                                                            <input class="dropdown-item rounded" [formControl]="myControl"
+                                                            [matAutocomplete]="auto"
+                                                            
+                                                            placeholder="Enter Name" 
+                                                            editableOnEnter>
+                                                        <mat-autocomplete class="auto-com" panelWidth="170px"
+                                                            #auto="matAutocomplete" >
+                                                            <mat-option *ngFor="let option of filteredOptions | async"
+                                                                [value]="option">
+                                                                <div>
+                                                                    <img [src]="option.img" alt=""
+                                                                        class="auto-img img-fluid rounded-circle mr-2">
+                                                                    {{option.name}}
+                                                                </div>
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                            
                                                         </ng-template>
                                                     </editable>
                                                 </ng-container>
                                                 <ng-container *ngIf="column === 'status'">
                                                     <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
-                                                            {{element[column]}}
+                                                                <ng-container *ngIf="!element[column];else elseStatus">
+                                                                        <button class="table-input-status-control rounded">+ Add </button>
+                                                                    </ng-container>
+                                                                    <ng-template #elseStatus>
+                                                                            {{element[column]}}
+                                                                    </ng-template>
                                                         </ng-template>
                                                         <ng-template editMode>
-                                                            <mat-chip-list>
+                                                            <!-- <mat-chip-list>
                                                                 <select class="form-control" [(value)]="selected"
                                                                     [formControl]="getControl(index, 'status')"
-                                                                    focusable editableOnEnter>
+                                                                    editableOnEnter>
                                                                     
                                                                 </select>
-                                                            </mat-chip-list>
+                                                            </mat-chip-list> -->
+
+                                                                  
                                                         </ng-template>
                                                     </editable>
                                                 </ng-container>
@@ -223,17 +247,17 @@
                                                     <editable (update)="updateField(index, column)">
                                                         <ng-template viewMode>
                                                             <ng-container *ngIf="!element[column];else elseNumbers">
-                                                                <input class="table-input-control" type="text" [value] = "element[column]">
+                                                                <button class="table-input-control"></button>
                                                             </ng-container>
                                                             <ng-template #elseNumbers>
-                                                                    <input class="table-input-control" type="text" [value] = "element[column]">
+                                                                    {{element[column]}}
                                                             </ng-template>
                                                         </ng-template>
                                                         <ng-template editMode>
                                                             <mat-form-field class="example-full-width">
                                                                 <input matInput
                                                                     [formControl]="getControl(index, 'numbers')"
-                                                                    focusable editableOnEnter>
+                                                                    editableOnEnter>
                                                                 <mat-error
                                                                     *ngIf="getControl(index, 'numbers').hasError('required')">
                                                                     This Field is required!

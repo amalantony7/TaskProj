@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Passwordvalidator } from '../validators/password_validator';
+import { AuthService } from '../services/auth.service';
+import { MatSnackBar } from '@angular/material';
+import { ResetPassword } from '../models/columnHeader';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
@@ -13,8 +17,12 @@ export class ResetPasswordComponent implements OnInit {
   public nhide = true;
   public cnhide = true;
   resetForm : FormGroup;
+  rPass : ResetPassword;
 
-  constructor(private fb : FormBuilder) { }
+  constructor(private fb : FormBuilder,
+              private _authService : AuthService,
+              public snackBar : MatSnackBar,
+              private _router : Router) { }
 
   get oPassword(){
     return this.resetForm.get('oPassword');
@@ -35,6 +43,26 @@ export class ResetPasswordComponent implements OnInit {
       cnPassword : ['',[Validators.required,Validators.minLength(6),Validators.maxLength(10)]]
     }, {validator : Passwordvalidator});
 
+  }
+
+  onReset(myForm){
+      this.rPass = {
+        old_password : this.resetForm.controls['oPassword'].value,
+        new_password : this.resetForm.controls['nPassword'].value,
+        confirm_password : this.resetForm.controls['cnPassword'].value
+      }
+      this._authService.resetPassword(this.rPass)
+                          .subscribe(
+                            res => {
+                              this.snackBar.open("Password Changed Successfully" , 'Dismiss' , {duration : 2000 , verticalPosition : 'top'});
+                              myForm.reset();
+                              this._router.navigate(['/home']);
+                            },
+                            error => {
+                              console.log(error);
+                              this.snackBar.open("Password reset failed!" , 'Dismiss' , {duration : 2000 , horizontalPosition : 'end'});
+                            }
+                          )
   }
 
 }

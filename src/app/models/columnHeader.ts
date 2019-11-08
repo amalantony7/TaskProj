@@ -5,6 +5,12 @@ export interface UserData{
     avatar : string
   }
 
+export interface ResetPassword {
+    old_password : string,
+    new_password : string,
+    confirm_password : string
+}  
+
 export interface BoardDetails{
     id? : number,
     board_name : string

@@ -154,7 +154,9 @@
 
  
 .side-menu::-webkit-scrollbar-thumb {
-  background-color: rgb(18, 98, 129);
-  outline: 1px solid slategrey;
+  background-color: #5d6baf;
+  opacity: 0;
+  border-radius: 10px;
+  
 }
 

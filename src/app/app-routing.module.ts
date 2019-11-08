@@ -18,7 +18,7 @@ const routes: Routes = [
 
   ] , canActivate : [AuthGuard]}, 
   {path: "login" , component: LoginComponent},
-  {path: "resetpassword" , component: ResetPasswordComponent},
+  {path: "resetpassword" , component: ResetPasswordComponent , canActivate : [AuthGuard]},
   {path : "**" , component: PagenotfoundComponent}
   
 ];

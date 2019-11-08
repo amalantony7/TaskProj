@@ -11,8 +11,8 @@ export class CoreService {
   listHeader: string[] = ['select', 'text', 'status', 'date', 'numbers', 'peoples', 'star'];
 
   list: PeriodicElement[] = [
-    { text: "Itemname 1", status: 'Delivered', date: new Date("2017-01-04"), numbers: null, peoples: "Rosemary" },
-    { text: "Itemname 2", status: 'Pending', date: new Date("2019-12-27"), numbers: null, peoples: "Anith" }
+    { text: "Itemname 1", status: 'Delivered', date: new Date("2017-01-04"), numbers: 201253, peoples: {"img" : "assets/images/users/user-2.jpg" ,"name":"Rosemary"} },
+    { text: "", status: "", date: null, numbers: null, peoples: {"img" : "assets/images/users/user-2.jpg" ,"name":"Anith"} }
   ];
   list$: BehaviorSubject<PeriodicElement[]> = new BehaviorSubject(this.list);
 

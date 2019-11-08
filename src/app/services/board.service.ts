@@ -9,8 +9,8 @@ import { BoardDetails , UserData} from '../models/columnHeader';
 })
 export class BoardService {
 
-  private _usrUrl = "https://227e58eb.ngrok.io/dashboard/current-users/";
-  private _listUrl = "https://227e58eb.ngrok.io/dashboard/create-board/";
+  private _usrUrl = "https://692c3cbd.ngrok.io/dashboard/current-users/";
+  private _listUrl = "https://692c3cbd.ngrok.io/dashboard/create-board/";
   private _tableUrl = "";
 
   constructor( private _http : HttpClient) { }

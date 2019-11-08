@@ -170,13 +170,32 @@ img {
 }
 
 .table-drp-item{
-    border-bottom : 0.05px solid rgb(239, 239, 240);
+    border-bottom : 0.03px solid rgb(239, 239, 240);
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    font-size: 10pt !important;
+
 }
 
 .drp-img{
     width: 15px;
     margin-right: 25px;
     height: 15px;
+    margin-left: 6px;
+  }
+
+ ::ng-deep.mat-icon{
+      color : #30419b;
+  }
+
+  .drp-btn{
+
+    padding: 0;
+
+    background-color: transparent;
+    background-clip: padding-box;
+    border: none;
+
   }
 
 
@@ -206,21 +225,65 @@ img {
     font-size: 13.5px !important;
 }
 
-.table-input-control{
+.table-input-text-control{
     display: block;
-    width: 100px;
     height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
-    font-size: 1rem;
+    padding: 0;
+    line-height: 1.5;
+    color:  rgba(0,0,0,.87) ;
+    background-color: transparent;
+    background-clip: padding-box;
+    border: none;
+    font-size: 13.5px !important;
+    font-family: "Poppins", sans-serif !important;
+}
+
+.table-input-status-control{
+    display: block;
+    width: 80px;
+    height: 25px;
+    padding-right: 12px;
     font-weight: 400;
     line-height: 1.5;
     color: #495057;
-    background-color: rgb(255, 255, 255);
+    background-color: #F0F4F7;
+    background-clip: padding-box;
+    border: none;
+    font-size: 13.3px !important;
+}
+
+
+
+.table-input-date-control{
+    display: block;
+    height: calc(1.5em + .75rem + 2px);
+    padding: 0;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: transparent;
+    background-clip: padding-box;
+    border: none;
+    font-size: 13.5px !important;
+    font-weight: 500;
+    font-family: "Poppins", sans-serif !important;
+}
+
+.table-input-control{
+    display: block;
+    width: 90px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: 0;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #495057;
+    background-color: transparent;
     background-clip: padding-box;
     border: 0.5px dotted rgb(104, 103, 103);
     border-radius: .25rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    font-size: 13px;
+    font-size: 13.5px !important;
+    font-family: "Poppins", sans-serif !important;
 }
 
 
@@ -238,7 +301,10 @@ img {
 
 .table-drp-men{
     transform: translate3d(-150px, 20px, 0px) !important;
+    
 }
+
+
 
 .thumb-md {
     height: 32px;
@@ -263,7 +329,8 @@ img {
     flex: 0 0 6px;
     display: flex;
     border-bottom: 1px solid white;
-    height: 51px;
+    height: 61px;
+    border-radius: 2px;
     background-color: #30419b !important;
 }
 
@@ -274,7 +341,7 @@ img {
     flex: 1 1 auto;
     border-radius: 0;
     border: 1px solid #e6e9ef;
-    height: 50px;
+    height: 60px;
     background: #fff;
     font-size: 13px;
     outline: none;

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
+import { LoginDialogComponent } from '../dialog/login-dialog/login-dialog.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,10 +15,13 @@ export class LoginComponent implements OnInit {
   loginForm : FormGroup;
   public emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+  fileNameDialogRef : MatDialogRef<LoginDialogComponent>;
+
   constructor(private fb : FormBuilder ,
               private _auth : AuthService ,
               private _router : Router,
-              public dialog : MatDialog) { }
+              public dialog : MatDialog,
+              public snackBar : MatSnackBar) { }
 
   get email(){
     return this.loginForm.get('email');
@@ -43,11 +47,17 @@ export class LoginComponent implements OnInit {
                             localStorage.setItem('token' , "token " +res.key);
                             myForm.reset();
                             this._router.navigate(["/home"]);
+                            this.openDialog();
                           },
                           error => {
                             console.log(error);
+                            this.snackBar.open("Login Failed" , 'Dismiss' , {duration : 4000 , horizontalPosition : 'end'});
                           }
                         )
+  }
+
+  openDialog(){
+    this.fileNameDialogRef = this.dialog.open(LoginDialogComponent);
   }
 
 }

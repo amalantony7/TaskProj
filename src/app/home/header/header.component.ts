@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
               this._authService.logoutUser();
             }
           }
-          this._router.navigate(['/login']);
+          this._authService.logoutUser();
         }
       )
 

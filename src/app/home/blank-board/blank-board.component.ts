@@ -36,7 +36,7 @@ export class BlankBoardComponent implements OnInit {
   ]
 
 
-  options: string[] = this.core.list.map(e => e.peoples);
+  options: any[] = this.core.list.map(e => e.peoples);
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
 
@@ -148,12 +148,17 @@ export class BlankBoardComponent implements OnInit {
 
  
   applyFilter(filterValue: string) {
+    console.log(filterValue);
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    console.log(this.dataSource.filter)
   }
 
+
+
   private _filter(value: string): string[] {
+    console.log(value)
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option['name'].toLowerCase().includes(filterValue));
   }
 
 
