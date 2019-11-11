@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { HeaderComponent } from './home/header/header.component';
 import { BlankBoardComponent } from './home/blank-board/blank-board.component';
-import { AvatarModule} from 'ngx-avatar';
+import { AvatarModule } from 'ngx-avatar';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -22,12 +22,12 @@ import { EditModeDirective } from './editable/edit-mode-directive';
 import { FocusableDirective } from './editable/focusable-directive';
 import { EditableOnEnterDirective } from './editable/editable-on-enter-directive';
 import { CreateTableDialogComponent } from './dialog/create-table-dialog/create-table-dialog.component';
-import { LoaderComponent } from './loader/loader.component';
 import { CoreService } from './services/core.service';
 import { AuthGuard } from './Guards/auth.guard';
 import { BoardService } from './services/board.service';
 import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.component';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 
 @NgModule({
   declarations: [
@@ -45,10 +45,9 @@ import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.compone
     FocusableDirective,
     EditableOnEnterDirective,
     CreateTableDialogComponent,
-    LoaderComponent,
     LoginDialogComponent
   ],
-  entryComponents: [CreateBoardDialogComponent, CreateTableDialogComponent , LoginDialogComponent],
+  entryComponents: [CreateBoardDialogComponent, CreateTableDialogComponent, LoginDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -57,15 +56,20 @@ import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.compone
     AvatarModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({
+      showForeground: true
+    }),
+    NgxUiLoaderRouterModule
   ],
-  providers: [AuthService , CoreService , 
-              AuthGuard , BoardService ,
+  providers: [AuthService, CoreService,
+    AuthGuard, BoardService,
     {
-      provide : HTTP_INTERCEPTORS,
-      useClass : TokenInterceptorService, 
-      multi : true
-    } , 
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

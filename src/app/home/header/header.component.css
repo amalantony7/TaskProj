@@ -93,6 +93,7 @@
 #sidebar-menu > ul > li > a:hover, #sidebar-menu > ul > li > a:focus, #sidebar-menu > ul > li > a:active {
     color: #ffffff !important;
     text-decoration: none !important;
+    background-color: #3345a5;
 }
 
 #sidebar-menu > ul > li > a.mm-active {
@@ -140,9 +141,7 @@
     margin-top : 2.5px;
 }
 
-.mdi-delete:before {
-    margin-left: 58px;
-}
+
 
 .side-menu{
     overflow-y: auto !important;

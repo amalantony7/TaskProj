@@ -28,8 +28,6 @@ export class HeaderComponent implements OnInit {
   boardhead: BoardDetails;
   tName: string;
 
-  // initName: Array<string> = this.userName.split('');
-
   constructor(public dialog: MatDialog,
     private _boardService: BoardService,
     private _authService: AuthService,
@@ -37,6 +35,8 @@ export class HeaderComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit() {
+
+    // To display details of user on page load.
     this._boardService.getUserDetails()
       .subscribe(
         res => {
@@ -55,14 +55,12 @@ export class HeaderComponent implements OnInit {
         }
       )
 
-
+    // To display available Board list on page load.
     this._boardService.getBoardList()
       .subscribe(
         res => {
           this.boardName = res;
           this.pageHeader = res[0].board_name ? res[0].board_name : "";
-          console.log("boardList", res);
-
         },
         err => {
           console.log(err);
@@ -73,7 +71,8 @@ export class HeaderComponent implements OnInit {
 
   addNewBoard() {
 
-    //this.tableName.push("new table");
+    //For Adding New board.
+
     let dialogref = this.dialog.open(CreateBoardDialogComponent, {
       data: { bname: this.bName }
     });
@@ -103,6 +102,8 @@ export class HeaderComponent implements OnInit {
   }
 
   deleteBoards(list) {
+    //Deleting Board.
+
     this.boardhead = {
       id: list.id,
       board_name: list.board_name
@@ -110,7 +111,7 @@ export class HeaderComponent implements OnInit {
     this._boardService.deleteBoard(this.boardhead)
       .subscribe(
         res => {
-
+          this.boardName = res;
           this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
         },
         error => {
@@ -121,6 +122,8 @@ export class HeaderComponent implements OnInit {
 
 
   createTable() {
+    // To create New table within a board.
+
     let dialogref = this.dialog.open(CreateTableDialogComponent, {
       data: { tname: this.tName }
     });
@@ -147,8 +150,12 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  changeHeader(item) {
+  boardDetails(item) {
+    // To display Board details .
+
     this.pageHeader = item.board_name;
+    console.log("board Details: ", item)
+
   }
 
 }

@@ -268,6 +268,22 @@ img {
     font-weight: 500;
     font-family: "Poppins", sans-serif !important;
 }
+.table-input-member-control{
+    display: block;
+    height: 32px;
+    width: 32px;
+    padding: 0;
+    margin-left: 1px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: transparent;
+    background-clip: padding-box;
+    border: 0.5px solid grey;
+    font-size: 13.5px !important;
+    font-weight: 500;
+    font-family: "Poppins", sans-serif !important;
+}
 
 .table-input-control{
     display: block;
@@ -309,7 +325,7 @@ img {
 .thumb-md {
     height: 32px;
     width: 32px;
-    margin-left: 0.5px;
+    margin-left: 1px;
 }
 
 ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {

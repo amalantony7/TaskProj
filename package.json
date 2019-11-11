@@ -25,6 +25,7 @@
     "ngx-avatar": "^3.7.0",
     "ngx-loading": "^2.0.1",
     "ngx-take-until-destroy": "^5.4.0",
+    "ngx-ui-loader": "^8.0.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

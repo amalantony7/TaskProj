@@ -57,11 +57,11 @@
                                                         <mat-autocomplete class="auto-com" panelWidth="170px"
                                                             #auto="matAutocomplete">
                                                             <mat-option *ngFor="let option of filteredOptions | async"
-                                                                [value]="option.name">
+                                                                [value]="option.first_name">
                                                                 <div>
-                                                                    <img [src]="option.img" alt=""
+                                                                    <img [src]="option.avatar" alt=""
                                                                         class="auto-img img-fluid rounded-circle mr-2">
-                                                                    {{option.name}}
+                                                                    {{option.first_name}}
                                                                 </div>
                                                             </mat-option>
                                                         </mat-autocomplete>
@@ -78,120 +78,136 @@
                                 <div class="table-responsive">
 
                                     <table mat-table [dataSource]="dataSource" matSort class="table table-hover">
-                                        <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns;let i = index">
+                                        <ng-container [matColumnDef]="column"
+                                            *ngFor="let column of displayedColumns;let i = index">
                                             <ng-container>
                                                 <ng-container *ngIf="column === 'select';else elseBlock" sticky>
-                                                <mat-header-cell *matHeaderCellDef>
-                                                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                        [checked]="selection.hasValue() && isAllSelected()"
-                                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                        [aria-label]="checkboxLabel()">
-                                                    </mat-checkbox>
-                                                </mat-header-cell>
-                                            </ng-container>
-                                            <ng-template #elseBlock>
-                                                <ng-container *ngIf="column === 'star';else elseCase">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        
+                                                    </mat-header-cell>
+                                                </ng-container>
+                                                <ng-template #elseBlock>
+                                                    <ng-container *ngIf="column === 'star';else elseCase">
 
                                                         <mat-header-cell *matHeaderCellDef stickyend>
                                                             <div class="table-drp dropdown">
-                                                                <button class="drp-btn dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                  <span><mat-icon>add_circle_outline</mat-icon></span>
+                                                                <button class="drp-btn dropdown-toggle"
+                                                                    id="dropdownMenuButton" data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                    <span>
+                                                                        <mat-icon>add_circle_outline</mat-icon>
+                                                                    </span>
                                                                 </button>
-                                                                <div class="table-drp-men dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                  <a class="table-drp-item dropdown-item" *ngFor= "let colHead of columnHeaders;let index = index"><img class="drp-img" [src]="colHead.icon">{{colHead.field}}</a>
+                                                                <div class="table-drp-men dropdown-menu"
+                                                                    aria-labelledby="dropdownMenuButton">
+                                                                    <a class="table-drp-item dropdown-item"
+                                                                        *ngFor="let colHead of columnHeaders;let index = index"><img
+                                                                            class="drp-img"
+                                                                            [src]="colHead.icon">{{colHead.choice}}</a>
                                                                 </div>
-                                                              </div>
-                                                        </mat-header-cell>
-                                                </ng-container>
-                                                <ng-template #elseCase>
-                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                                                       
-                                                                <editable (update)="updateHeader(index,column)">
-                                                                    <ng-template viewMode>
-                                                                          {{column}}
-                                                                    </ng-template>
-                                                                    <ng-template editMode>
-                                                                            <mat-form-field class="example-full-width">
-                                                                                    <input matInput
-                                                                                        [formControl]="getControl(index, column)"
-                                                                                        editableOnEnter>
-                                                                                </mat-form-field>
-                                                                    </ng-template>
-                                                                </editable>
-                                                            </mat-header-cell>
-                                                </ng-template>
-                                            </ng-template>
-
-
-                                            <mat-cell *matCellDef="let element;let index = index">
-                                                <ng-container *ngIf="column === 'select'">
-                                                    <mat-checkbox (click)="$event.stopPropagation()"
-                                                        (change)="$event ? selection.toggle(element) : null"
-                                                        [checked]="selection.isSelected(element)"
-                                                        [aria-label]="checkboxLabel(element)">
-                                                    </mat-checkbox>
-                                                </ng-container>
-                                                <ng-container *ngIf="column === 'text'">
-                                                    <editable (update)="updateField(index, column)">
-                                                        <ng-template viewMode>
-                                                                <ng-container *ngIf="!element[column];else elseText">
-                                                                        <button class="table-input-text-control"> Item Name </button>
-                                                                    </ng-container>
-                                                                    <ng-template #elseText>
-                                                                            {{element[column]}}
-                                                                    </ng-template>
-
-                                                            
-                                                        </ng-template>
-                                                        <ng-template editMode>
-                                                            <mat-form-field class="example-full-width">
-                                                                <input matInput
-                                                                    [class.is-invalid]="getControl(index , 'text').invalid && getControl(index , 'text').touched"
-                                                                    [formControl]="getControl(index, 'text')"
-                                                                    editableOnEnter>
-                                                                <mat-error
-                                                                    *ngIf="getControl(index, 'text').hasError('required')">
-                                                                    This Field is required!
-                                                                </mat-error>
-                                                            </mat-form-field>
-                                                        </ng-template>
-                                                    </editable>
-                                                </ng-container>
-                                                <ng-container *ngIf="column === 'date'">
-                                                    <editable (update)="updateField(index, column)">
-                                                        <ng-template viewMode>
-                                                            <ng-container *ngIf="!element[column];else elseDate">
-                                                                <button class="table-input-date-control">dd-mm-yy</button>
-                                                            </ng-container>
-                                                            <ng-template #elseDate>
-                                                                    {{element[column] | date:'dd-MM-yyyy'}}
-                                                            </ng-template>
-                                                            
-                                                        </ng-template>
-                                                        <ng-template editMode>
-                                                            <mat-form-field>
-                                                                <input matInput [matDatepicker]="picker"
-                                                                    [formControl]="getControl(index, 'date')"
-                                                                    placeholder="dd-mm-yy" editableOnEnter>
-                                                                <mat-datepicker-toggle matSuffix [for]="picker">
-                                                                </mat-datepicker-toggle>
-                                                                <mat-datepicker #picker></mat-datepicker>
-                                                            </mat-form-field>
-                                                        </ng-template>
-                                                    </editable>
-                                                </ng-container>
-                                                <ng-container *ngIf="column === 'peoples'">
-                                                    <editable (update)="updateField(index, column)">
-                                                        <ng-template viewMode>
-                                                            <div>
-                                                                <img [src]="element[column]['img']" alt=""
-                                                                    class="thumb-md rounded-circle mr-2">
-                                                                {{element[column]['name']}}
                                                             </div>
+                                                        </mat-header-cell>
+                                                    </ng-container>
+                                                    <ng-template #elseCase>
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header>
 
-                                                        </ng-template>
-                                                        <ng-template editMode>
-                                                            <!-- <mat-form-field class="example-full-width">
+                                                            <editable (update)="updateHeader(index,column)">
+                                                                <ng-template viewMode>
+                                                                    {{column}}
+                                                                </ng-template>
+                                                                <ng-template editMode>
+                                                                    <mat-form-field class="example-full-width">
+                                                                        <input matInput
+                                                                            [formControl]="getControl(index, column)"
+                                                                            editableOnEnter>
+                                                                    </mat-form-field>
+                                                                </ng-template>
+                                                            </editable>
+                                                        </mat-header-cell>
+                                                    </ng-template>
+                                                </ng-template>
+
+
+                                                <mat-cell *matCellDef="let element;let index = index">
+                                                    <ng-container *ngIf="column === 'select'">
+                                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                            (change)="$event ? selection.toggle(element) : null"
+                                                            [checked]="selection.isSelected(element)"
+                                                            [aria-label]="checkboxLabel(element)">
+                                                        </mat-checkbox>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="column === 'text'">
+                                                        <editable (update)="updateField(index, column)">
+                                                            <ng-template viewMode>
+                                                                <ng-container *ngIf="!element[column];else elseText">
+                                                                    <button class="table-input-text-control"> Item Name
+                                                                    </button>
+                                                                </ng-container>
+                                                                <ng-template #elseText>
+                                                                    {{element[column]}}
+                                                                </ng-template>
+
+
+                                                            </ng-template>
+                                                            <ng-template editMode>
+                                                                <mat-form-field class="example-full-width">
+                                                                    <input matInput
+                                                                        [class.is-invalid]="getControl(index , 'text').invalid && getControl(index , 'text').touched"
+                                                                        [formControl]="getControl(index, 'text')"
+                                                                        editableOnEnter>
+                                                                    <mat-error
+                                                                        *ngIf="getControl(index, 'text').hasError('required')">
+                                                                        This Field is required!
+                                                                    </mat-error>
+                                                                </mat-form-field>
+                                                            </ng-template>
+                                                        </editable>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="column === 'date'">
+                                                        <editable (update)="updateField(index, column)">
+                                                            <ng-template viewMode>
+                                                                <ng-container *ngIf="!element[column];else elseDate">
+                                                                    <button
+                                                                        class="table-input-date-control">dd-mm-yy</button>
+                                                                </ng-container>
+                                                                <ng-template #elseDate>
+                                                                    {{element[column] | date:'dd-MM-yyyy'}}
+                                                                </ng-template>
+
+                                                            </ng-template>
+                                                            <ng-template editMode>
+                                                                <mat-form-field>
+                                                                    <input matInput [matDatepicker]="picker"
+                                                                        [formControl]="getControl(index, 'date')"
+                                                                        placeholder="dd-mm-yy" editableOnEnter>
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </ng-template>
+                                                        </editable>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="column === 'peoples'">
+                                                        <editable (update)="updateField(index, column)">
+                                                            <ng-template viewMode>
+                                                                    <ng-container *ngIf="element[column]['name'] == '';else elseMember">
+                                                                            <button
+                                                                                class="btn table-input-member-control rounded-circle">
+                                                                                <i class="mdi mdi-account"></i>
+                                                                            </button>
+                                                                        </ng-container>
+                                                                        <ng-template #elseMember>
+                                                                                <div>
+                                                                                        <img [src]="element[column]['img']" alt=""
+                                                                                            class="thumb-md rounded-circle mr-2">
+                                                                                        {{element[column]['name']}}
+                                                                                    </div>
+                                                                        </ng-template>
+
+
+                                                            </ng-template>
+                                                            <ng-template editMode>
+                                                                <!-- <mat-form-field class="example-full-width">
                                                                 <input matInput
                                                                     [formControl]="getControl(index, 'peoples')"
                                                                      editableOnEnter>
@@ -200,38 +216,38 @@
                                                                     This Field is required!
                                                                 </mat-error>
                                                             </mat-form-field> -->
-                                                            <input class="dropdown-item rounded" [formControl]="myControl"
-                                                            [matAutocomplete]="auto"
-                                                            
-                                                            placeholder="Enter Name" 
-                                                            editableOnEnter>
-                                                        <mat-autocomplete class="auto-com" panelWidth="170px"
-                                                            #auto="matAutocomplete" >
-                                                            <mat-option *ngFor="let option of filteredOptions | async"
-                                                                [value]="option">
-                                                                <div>
-                                                                    <img [src]="option.img" alt=""
-                                                                        class="auto-img img-fluid rounded-circle mr-2">
-                                                                    {{option.name}}
-                                                                </div>
-                                                            </mat-option>
-                                                        </mat-autocomplete>
-                                                            
-                                                        </ng-template>
-                                                    </editable>
-                                                </ng-container>
-                                                <ng-container *ngIf="column === 'status'">
-                                                    <editable (update)="updateField(index, column)">
-                                                        <ng-template viewMode>
+                                                                <input class="dropdown-item rounded"
+                                                                    [formControl]="myControl" [matAutocomplete]="auto"
+                                                                    placeholder="Enter Name" editableOnEnter>
+                                                                <mat-autocomplete class="auto-com" panelWidth="170px"
+                                                                    #auto="matAutocomplete">
+                                                                    <mat-option
+                                                                        *ngFor="let option of filteredOptions | async"
+                                                                        [value]="option">
+                                                                        <div>
+                                                                            <img [src]="option.avatar" alt=""
+                                                                                class="auto-img img-fluid rounded-circle mr-2">
+                                                                            {{option.first_name}}
+                                                                        </div>
+                                                                    </mat-option>
+                                                                </mat-autocomplete>
+
+                                                            </ng-template>
+                                                        </editable>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="column === 'status'">
+                                                        <editable (update)="updateField(index, column)">
+                                                            <ng-template viewMode>
                                                                 <ng-container *ngIf="!element[column];else elseStatus">
-                                                                        <button class="table-input-status-control rounded">+ Add </button>
-                                                                    </ng-container>
-                                                                    <ng-template #elseStatus>
-                                                                            {{element[column]}}
-                                                                    </ng-template>
-                                                        </ng-template>
-                                                        <ng-template editMode>
-                                                            <!-- <mat-chip-list>
+                                                                    <button class="table-input-status-control rounded">+
+                                                                        Add </button>
+                                                                </ng-container>
+                                                                <ng-template #elseStatus>
+                                                                    {{element[column]}}
+                                                                </ng-template>
+                                                            </ng-template>
+                                                            <ng-template editMode>
+                                                                <!-- <mat-chip-list>
                                                                 <select class="form-control" [(value)]="selected"
                                                                     [formControl]="getControl(index, 'status')"
                                                                     editableOnEnter>
@@ -239,36 +255,36 @@
                                                                 </select>
                                                             </mat-chip-list> -->
 
-                                                                  
-                                                        </ng-template>
-                                                    </editable>
-                                                </ng-container>
-                                                <ng-container *ngIf="column === 'numbers'">
-                                                    <editable (update)="updateField(index, column)">
-                                                        <ng-template viewMode>
-                                                            <ng-container *ngIf="!element[column];else elseNumbers">
-                                                                <button class="table-input-control"></button>
-                                                            </ng-container>
-                                                            <ng-template #elseNumbers>
-                                                                    {{element[column]}}
+
                                                             </ng-template>
-                                                        </ng-template>
-                                                        <ng-template editMode>
-                                                            <mat-form-field class="example-full-width">
-                                                                <input matInput
-                                                                    [formControl]="getControl(index, 'numbers')"
-                                                                    editableOnEnter>
-                                                                <mat-error
-                                                                    *ngIf="getControl(index, 'numbers').hasError('required')">
-                                                                    This Field is required!
-                                                                </mat-error>
-                                                            </mat-form-field>
-                                                        </ng-template>
-                                                    </editable>
-                                                </ng-container>
-                                                <ng-container *ngIf="column === 'star'">
-                                                </ng-container>
-                                            </mat-cell>
+                                                        </editable>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="column === 'numbers'">
+                                                        <editable (update)="updateField(index, column)">
+                                                            <ng-template viewMode>
+                                                                <ng-container *ngIf="!element[column];else elseNumbers">
+                                                                    <button class="table-input-control"></button>
+                                                                </ng-container>
+                                                                <ng-template #elseNumbers>
+                                                                    {{element[column]}}
+                                                                </ng-template>
+                                                            </ng-template>
+                                                            <ng-template editMode>
+                                                                <mat-form-field class="example-full-width">
+                                                                    <input matInput
+                                                                        [formControl]="getControl(index, 'numbers')"
+                                                                        editableOnEnter>
+                                                                    <mat-error
+                                                                        *ngIf="getControl(index, 'numbers').hasError('required')">
+                                                                        This Field is required!
+                                                                    </mat-error>
+                                                                </mat-form-field>
+                                                            </ng-template>
+                                                        </editable>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="column === 'star'">
+                                                    </ng-container>
+                                                </mat-cell>
                                             </ng-container>
 
                                         </ng-container>
@@ -282,116 +298,6 @@
                                         </div>
                                         <input type="text" class="add-input" placeholder="+  Add">
                                     </div>
-
-                                    <!-- 
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Contact</th>
-                                            <th scope="col">Location</th>
-                                            <th scope="col" colspan="2">Date</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Philip Smead</td>
-                                            <td><span class="badge badge-success">Delivered</span></td>
-                                            <td>$9,420,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="assets/images/users/user-2.jpg" alt=""
-                                                        class="thumb-md rounded-circle mr-2"> Philip Smead
-                                                </div>
-                                            </td>
-                                            <td>Houston, TX 77074</td>
-                                            <td>15/1/2018</td>
-
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brent Shipley</td>
-                                            <td><span class="badge badge-warning">Pending</span></td>
-                                            <td>$3,120,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="assets/images/users/user-3.jpg" alt=""
-                                                        class="thumb-md rounded-circle mr-2"> Brent Shipley
-                                                </div>
-                                            </td>
-                                            <td>Oakland, CA 94612</td>
-                                            <td>16/1/2019</td>
-
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Robert Sitton</td>
-                                            <td><span class="badge badge-success">Delivered</span></td>
-                                            <td>$6,360,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="assets/images/users/user-4.jpg" alt=""
-                                                        class="thumb-md rounded-circle mr-2"> Robert Sitton
-                                                </div>
-                                            </td>
-                                            <td>Hebron, ME 04238</td>
-                                            <td>17/1/2019</td>
-
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alberto Jackson</td>
-                                            <td><span class="badge badge-danger">Cancel</span></td>
-                                            <td>$5,200,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="assets/images/users/user-5.jpg" alt=""
-                                                        class="thumb-md rounded-circle mr-2"> Alberto Jackson
-                                                </div>
-                                            </td>
-                                            <td>Salinas, CA 93901</td>
-                                            <td>18/1/2019</td>
-
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>David Sanchez</td>
-                                            <td><span class="badge badge-success">Delivered</span></td>
-                                            <td>$7,250,000</td>
-                                            <td>
-                                                <div>
-                                                    <img src="assets/images/users/user-6.jpg" alt=""
-                                                        class="thumb-md rounded-circle mr-2"> David Sanchez
-                                                </div>
-                                            </td>
-                                            <td>Cincinnati, OH 45202</td>
-                                            <td>19/1/2019</td>
-
-                                            <td>
-                                                <div>
-                                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody> -->
                                 </div>
                             </div>
                         </mat-card-content>

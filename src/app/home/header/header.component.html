@@ -28,7 +28,7 @@
                                 class="rounded-circle">
                             <ng-template #elseBlock>
                                 <img class="rounded-circle"
-                                    src="https://ui-avatars.com/api/?name={{userDetails.email.charAt(0)}}&background=0D8ABC&color=fff">
+                                    src="https://ui-avatars.com/api/?name={{userDetails.first_name.charAt(0)}}&background=0D8ABC&color=fff">
                             </ng-template>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
@@ -73,10 +73,10 @@
                     </a>
                 <li>
                 <li *ngFor="let tabName of boardName">
-                    <a class="waves-effect" href="" routerLink="blankboard" routerLinkActive="active">
+                    <a class="waves-effect"  routerLink="blankboard" routerLinkActive="active">
                         <a class="mdi mdi-delete float-right" (click)=deleteBoards(tabName)></a>
                         <div class="nav-side-list">
-                            <a (click)="changeHeader(tabName)">{{tabName.board_name}}</a>
+                            <a (click)="boardDetails(tabName)">{{tabName.board_name}}</a>
                         </div>
                     </a>
                 </li>

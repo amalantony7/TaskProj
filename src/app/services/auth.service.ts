@@ -10,38 +10,38 @@ import { ResetPassword } from '../models/columnHeader';
 })
 export class AuthService {
 
-  private _logUrl = "https://692c3cbd.ngrok.io/dashboard/rest-auth/login/";
-  private _rPassUrl = "https://692c3cbd.ngrok.io/dashboard/change-password/";
+  private _logUrl = "https://7bffdfa1.ngrok.io/dashboard/rest-auth/login/";
+  private _rPassUrl = "https://7bffdfa1.ngrok.io/dashboard/change-password/";
 
-  constructor(private _http : HttpClient ,
-              private _router : Router) { }
+  constructor(private _http: HttpClient,
+    private _router: Router) { }
 
 
-  loginUser(user){
-    return this._http.post<any>(this._logUrl,user)
-                      .pipe(catchError(this.errorHandler));
+  loginUser(user) {
+    return this._http.post<any>(this._logUrl, user)
+      .pipe(catchError(this.errorHandler));
   }
 
-  loggedIn(){
+  loggedIn() {
     return !!localStorage.getItem('token');
   }
 
-  getToken(){
+  getToken() {
     return localStorage.getItem('token');
   }
 
-  logoutUser(){
+  logoutUser() {
     localStorage.removeItem('token');
     this._router.navigate(['/login']);
 
   }
 
-  resetPassword(user){
-    return this._http.put<ResetPassword>(this._rPassUrl,user)
-                      .pipe(catchError(this.errorHandler));
+  resetPassword(user) {
+    return this._http.put<ResetPassword>(this._rPassUrl, user)
+      .pipe(catchError(this.errorHandler));
   }
 
-  errorHandler(error : HttpErrorResponse){
+  errorHandler(error: HttpErrorResponse) {
     return throwError(error.message || "Service Error");
   }
 }
