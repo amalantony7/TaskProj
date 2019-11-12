@@ -72,3 +72,11 @@
     font-weight: 400;
     padding-top: 2.5px;
   }
+
+  ::ng-deep .warning-snackbar {
+    background: rgb(145, 12, 12) !important;
+  }
+
+  ::ng-deep .success-snackbar {
+    background:green !important;
+  }

@@ -29,6 +29,11 @@ export interface Members{
     avatar : string
 }
 
+export interface Table{
+    id? : number,
+    table_name : string,
+    board : number
+}
 
 export interface HeaderElement{
     status : string,

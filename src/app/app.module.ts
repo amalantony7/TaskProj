@@ -28,6 +28,7 @@ import { BoardService } from './services/board.service';
 import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.component';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { NgxUiLoaderModule, NgxUiLoaderHttpModule, NgxUiLoaderRouterModule } fro
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    RouterModule,
     AvatarModule,
     HttpClientModule,
     ReactiveFormsModule,

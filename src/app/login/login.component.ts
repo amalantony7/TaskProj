@@ -46,10 +46,11 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', "token " + res.key);
           myForm.reset();
           this._router.navigate(["/home"]);
+          this.snackBar.open("welcome", '', { duration: 2000, verticalPosition : 'top' , horizontalPosition: 'right' , panelClass: ["success-snackbar"] });
         },
         error => {
           console.log(error);
-          this.snackBar.open("Login Failed", 'Dismiss', { duration: 4000, horizontalPosition: 'end' });
+          this.snackBar.open("Login Failed", '', { duration: 4000, horizontalPosition: 'end' , panelClass: ['warning-snackbar']});
         }
       )
   }

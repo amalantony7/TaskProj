@@ -10,8 +10,8 @@ import { ResetPassword } from '../models/columnHeader';
 })
 export class AuthService {
 
-  private _logUrl = "https://7bffdfa1.ngrok.io/dashboard/rest-auth/login/";
-  private _rPassUrl = "https://7bffdfa1.ngrok.io/dashboard/change-password/";
+  private _logUrl = "https://b662336c.ngrok.io/dashboard/rest-auth/login/";
+  private _rPassUrl = "https://b662336c.ngrok.io/dashboard/change-password/";
 
   constructor(private _http: HttpClient,
     private _router: Router) { }

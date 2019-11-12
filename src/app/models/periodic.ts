@@ -8,3 +8,9 @@ export interface PeriodicElement {
     date: Date;
     numbers : number
   }
+
+
+  export interface FullBoardList{
+    board_name : string,
+    tables : string
+  }

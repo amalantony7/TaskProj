@@ -6,7 +6,7 @@ import { BoardService } from 'src/app/services/board.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserData, BoardDetails } from 'src/app/models/columnHeader';
+import { UserData, BoardDetails, Table } from 'src/app/models/columnHeader';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -22,11 +22,13 @@ export class HeaderComponent implements OnInit {
     avatar: ""
   };
   public boardName: Array<BoardDetails> = [];
-  public tableName: Array<any> = ["group 1"];
   public pageHeader = "";
   bName: string;
+  bId : number;
   boardhead: BoardDetails;
+  tableName : Table;
   tName: string;
+  navButton = false;
 
   constructor(public dialog: MatDialog,
     private _boardService: BoardService,
@@ -35,6 +37,7 @@ export class HeaderComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit() {
+
 
     // To display details of user on page load.
     this._boardService.getUserDetails()
@@ -89,11 +92,11 @@ export class HeaderComponent implements OnInit {
           .subscribe(
             res => {
               this.boardName.push(res)
-              this.snackBar.open("Board added successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+              this.snackBar.open("Board added successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' , panelClass: ["success-snackbar"] });
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while adding Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+              this.snackBar.open("Error while adding Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' , panelClass: ['warning-snackbar'] });
             }
           )
       }
@@ -112,10 +115,10 @@ export class HeaderComponent implements OnInit {
       .subscribe(
         res => {
           this.boardName = res;
-          this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
+          this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top', panelClass: ["success-snackbar"] })
         },
         error => {
-          this.snackBar.open("Error while deleting Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+          this.snackBar.open("Error while deleting Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' , panelClass: ['warning-snackbar'] });
         }
       )
   }
@@ -134,15 +137,19 @@ export class HeaderComponent implements OnInit {
       }
       else {
         console.log("Dialog closed! " + result);
-        this.tName = result;
-        this._boardService.createtable(this.tName)
+        this.tableName = {
+          "table_name" : result,
+          "board" : this.bId
+        }
+        console.log(this.tableName);
+        this._boardService.createtable(this.tableName)
           .subscribe(
             res => {
-              this.snackBar.open("Table created successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+              this.snackBar.open("Table created successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' , panelClass: ["success-snackbar"] });
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while creating Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+              this.snackBar.open("Error while creating Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' , panelClass: ['warning-snackbar'] });
             }
           )
       }
@@ -152,10 +159,16 @@ export class HeaderComponent implements OnInit {
 
   boardDetails(item) {
     // To display Board details .
-
+    this.navButton = true;
     this.pageHeader = item.board_name;
-    console.log("board Details: ", item)
+    this.bId = item.id;
 
+  }
+
+// User Image default Avatar.
+  errorHandler(event) {
+    console.debug(event);
+    event.target.src = "https://ui-avatars.com/api/?name=" + this.userDetails.first_name.charAt(0) + "&background=560078&color=ffffff";
   }
 
 }

@@ -8,7 +8,7 @@ import { startWith, map } from 'rxjs/operators';
 import { PeriodicElement } from 'src/app/models/periodic';
 import { CoreService } from 'src/app/services/core.service';
 import { BoardService } from 'src/app/services/board.service';
-import { Members } from 'src/app/models/columnHeader';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 
 @Component({
@@ -18,8 +18,11 @@ import { Members } from 'src/app/models/columnHeader';
 })
 export class BlankBoardComponent implements OnInit {
 
-  displayedColumns: string[] = this.core.listHeader;
-  columnsToDisplay: string[] = this.displayedColumns.slice();
+  public board_id;
+  public numberRegex ="^[0-9]*$";
+
+  displayedColumns: string[] = ['select' , 'star'];
+  columnsToDisplay: string[] = [];
   dataSource: any;
   controls: FormArray;
   headerControls: FormArray;
@@ -35,7 +38,7 @@ export class BlankBoardComponent implements OnInit {
   options = [];
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
-
+  toGroups:any
 
   public collapsed = false;
 
@@ -50,10 +53,23 @@ export class BlankBoardComponent implements OnInit {
 
 
   constructor(private core: CoreService,
-    private _boardService: BoardService) { }
+    private _boardService: BoardService,
+    private route: ActivatedRoute) { }
 
 
   ngOnInit() {
+
+    this.core.listHeader.forEach((item) => {this.displayedColumns.splice(1,0,item)
+    console.log(this.displayedColumns)}
+    )
+      this.columnsToDisplay = this.displayedColumns.slice();
+    
+
+    // To retrive board_id from url passed as params.
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      let id = parseInt(params.get('id'));
+      this.board_id = id;
+    })
 
     // Display table-header choices on page load.
     this._boardService.getChoices()
@@ -68,40 +84,45 @@ export class BlankBoardComponent implements OnInit {
       )
 
     this._boardService.getmembers()
-        .subscribe(
-          res => {
-            this.options = res;
-            console.log(res);
-          },
-          err => {
-            console.log(err);
-          }
-        )
-      
+      .subscribe(
+        res => {
+          this.options = res;
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      )
+
 
     // Display table datas.  
     this.core.list$.subscribe(res => {
       this.dataSource = new MatTableDataSource(res)
     });
 
-    const toGroups = this.core.list$.value.map(entity => {
+    this.toGroups = this.core.list$.value.map(entity => {
       return new FormGroup({
         text: new FormControl(entity.text, [Validators.required]),
         status: new FormControl(entity.status, [Validators.required]),
         date: new FormControl(entity.date, Validators.required),
         peoples: new FormControl(entity.peoples, Validators.required),
-        numbers: new FormControl(entity.numbers, Validators.required),
-      }, { updateOn: "blur" });
+        numbers: new FormControl(entity.numbers, Validators.pattern(this.numberRegex)),
+      });
     });
 
-    const toHeaderGroups = this.core.listHeader$.value.forEach(elements => {
+    const toHeaderGroups = this.core.listHeader$.value.map(elements => {
       return new FormGroup({
-        textHeader: new FormControl(elements)
-      }, { updateOn: 'blur' });
+        text: new FormControl(elements),
+        status: new FormControl(elements),
+        date: new FormControl(elements),
+        peoples: new FormControl(elements),
+        numbers: new FormControl(elements)
+      });
     });
 
 
-    this.controls = new FormArray(toGroups);
+    this.controls = new FormArray(this.toGroups);
+    this.headerControls = new FormArray(toHeaderGroups)
 
     // To filter table including Peoples column.
     this.dataSource.filterPredicate = (data: PeriodicElement, filter: string) => {
@@ -134,6 +155,11 @@ export class BlankBoardComponent implements OnInit {
       console.log(index, field, control.value);
     }
 
+  }
+
+  updateHeader(index, event) {
+      this.core.updateHeader(index, event)
+      this.dataSource.sort = this.sort;
   }
 
   removeSelectedRows() {
@@ -197,12 +223,18 @@ export class BlankBoardComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option['first_name'].toLowerCase().includes(filterValue));
   }
-
+ 
 
   getTotalCost() {
 
     // Table Footer.
     return this.core.list.map(t => t.numbers).reduce((acc, value) => acc + value, 0);
+  }
+
+
+  addColumn(index) {
+    console.log(this.displayedColumns);
+    this.columnsToDisplay.push(this.displayedColumns[index]);
   }
 
 

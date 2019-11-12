@@ -101,7 +101,7 @@
                                                                 <div class="table-drp-men dropdown-menu"
                                                                     aria-labelledby="dropdownMenuButton">
                                                                     <a class="table-drp-item dropdown-item"
-                                                                        *ngFor="let colHead of columnHeaders;let index = index"><img
+                                                                        *ngFor="let colHead of columnHeaders;let index = index" (click)="addColumn(index)"><img
                                                                             class="drp-img"
                                                                             [src]="colHead.icon">{{colHead.choice}}</a>
                                                                 </div>
@@ -111,15 +111,15 @@
                                                     <ng-template #elseCase>
                                                         <mat-header-cell *matHeaderCellDef mat-sort-header>
 
-                                                            <editable (update)="updateHeader(index,column)">
+                                                            <editable>
                                                                 <ng-template viewMode>
                                                                     {{column}}
                                                                 </ng-template>
                                                                 <ng-template editMode>
                                                                     <mat-form-field class="example-full-width">
                                                                         <input matInput
-                                                                            [formControl]="getControl(index, column)"
-                                                                            editableOnEnter>
+                                                                            [formControl]="getHeaderControl(i, column)"
+                                                                            editableOnEnter (input)="updateHeader(index,column , $event.target.value)">
                                                                     </mat-form-field>
                                                                 </ng-template>
                                                             </editable>
@@ -273,10 +273,10 @@
                                                                 <mat-form-field class="example-full-width">
                                                                     <input matInput
                                                                         [formControl]="getControl(index, 'numbers')"
-                                                                        editableOnEnter>
+                                                                        editableOnEnter >
                                                                     <mat-error
-                                                                        *ngIf="getControl(index, 'numbers').hasError('required')">
-                                                                        This Field is required!
+                                                                        *ngIf="getControl(index, 'numbers').hasError('pattern')">
+                                                                        Only digits are allowed!
                                                                     </mat-error>
                                                                 </mat-form-field>
                                                             </ng-template>

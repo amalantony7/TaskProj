@@ -14,7 +14,7 @@
 
                 <!-- Create Table Button-->
                 <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
-                    <button type="button" (click)="createTable()"
+                    <button type="button" *ngIf="navButton === true" (click)="createTable()"
                         class="btn btn-outline-primary waves-effect waves-light"><span class="ti-plus"></span> Create
                         Table</button>
                 </li>
@@ -25,7 +25,7 @@
                         <a class="dropdown-toggle nav-link nav-user" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="false" aria-expanded="false">
                             <img *ngIf="userDetails.avatar; else elseBlock" [src]="userDetails.avatar"
-                                class="rounded-circle">
+                                class="rounded-circle" (error)="errorHandler($event)">
                             <ng-template #elseBlock>
                                 <img class="rounded-circle"
                                     src="https://ui-avatars.com/api/?name={{userDetails.first_name.charAt(0)}}&background=0D8ABC&color=fff">
@@ -73,11 +73,12 @@
                     </a>
                 <li>
                 <li *ngFor="let tabName of boardName">
-                    <a class="waves-effect"  routerLink="blankboard" routerLinkActive="active">
+                    <a class="waves-effect" (click)="boardDetails(tabName)" [routerLink] = "['/home/blankboard',tabName.id]" routerLinkActive="active">
                         <a class="mdi mdi-delete float-right" (click)=deleteBoards(tabName)></a>
                         <div class="nav-side-list">
-                            <a (click)="boardDetails(tabName)">{{tabName.board_name}}</a>
+                            <a>{{tabName.board_name}}</a>
                         </div>
+
                     </a>
                 </li>
             </ul>

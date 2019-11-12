@@ -8,7 +8,7 @@ import { PeriodicElement } from '../models/periodic';
 })
 export class CoreService {
 
-  listHeader: string[] = ['select', 'text', 'status', 'date', 'numbers', 'peoples', 'star'];
+  listHeader: string[] = ['peoples', 'numbers', 'date',  'status', 'text' ];
 
   list: PeriodicElement[] = [
     { text: "Itemname 1", status: 'Delivered', date: new Date("2017-01-04"), numbers: 201253, peoples: {"img" : "assets/images/users/user-2.jpg" ,"name":"User"} },
@@ -37,6 +37,10 @@ export class CoreService {
     });
     //update api goes here
     this.list$.next(this.list);
+  }
+
+  updateHeader(index , value){
+    this.listHeader[index] = value;
   }
 
   getControl(index, fieldName) {
