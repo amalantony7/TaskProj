@@ -24,7 +24,8 @@
                         </mat-card-title>
                     </mat-card-header>
                     <mat-card-content class="card-body">
-                        <form class="form-horizontal pt-5" [formGroup]="loginForm" (ngSubmit)= "onLogin(loginForm)" novalidate>
+                        <form class="form-horizontal pt-5" [formGroup]="loginForm" (ngSubmit)="onLogin(loginForm)"
+                            novalidate>
                             <div class="form-group">
                                 <div class="col-12">
                                     <div class="inputWithIcon">

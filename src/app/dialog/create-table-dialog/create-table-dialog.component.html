@@ -5,7 +5,7 @@
             </h5>
             <mat-dialog-actions>
                 <div class="form-group">
-                    <input type="text" class="form-control rounded" placeholder="Enter Table Name" [(ngModel)]="data.name">
+                    <input type="text" class="form-control rounded" placeholder="Enter Table Name" [(ngModel)]="data.name" required>
                     <div class="flex pt-4 ">
                         <button class="btn btn-outline-primary float-left" (click)="onNoClick()">Cancel</button>
                         <button class="btn btn-outline-primary float-right" [mat-dialog-close]="data.name">Ok</button>

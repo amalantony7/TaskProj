@@ -29,6 +29,7 @@ import { TokenInterceptorService } from './interceptors/token-interceptor.servic
 import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.component';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 import { RouterModule } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,9 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     FormsModule,
     NgxUiLoaderModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    }),
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true
     }),

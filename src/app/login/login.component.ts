@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { MatSnackBar, MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { LoginDialogComponent } from '../dialog/login-dialog/login-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private _auth: AuthService,
     private _router: Router,
-    public snackBar: MatSnackBar) { }
+    private toastr : ToastrService) { }
 
   get email() {
     return this.loginForm.get('email');
@@ -46,11 +47,12 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('token', "token " + res.key);
           myForm.reset();
           this._router.navigate(["/home"]);
-          this.snackBar.open("welcome", '', { duration: 2000, verticalPosition : 'top' , horizontalPosition: 'right' , panelClass: ["success-snackbar"] });
+          this.toastr.success('Welcome' , '' ,{ timeOut: 2000 });
         },
         error => {
           console.log(error);
-          this.snackBar.open("Login Failed", '', { duration: 4000, horizontalPosition: 'end' , panelClass: ['warning-snackbar']});
+          // this.snackBar.open("Login Failed", '', { duration: 4000, horizontalPosition: 'end' });
+          this.toastr.error('Login Failed' , '' ,{ timeOut: 4000 });
         }
       )
   }

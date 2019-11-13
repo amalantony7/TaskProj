@@ -5,29 +5,31 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <mat-card class="card m-b-30 mt-4" *ngFor="let group of groups">
+                    <mat-card class="card m-b-30 mt-4" *ngFor="let group of tables">
                         <mat-card-content class="card-body">
                             <div class="page-title-box pt-1">
                                 <div class="row align-items-center">
                                     <div class="col-sm-4">
                                         <div class="dropdown notification-list">
                                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                                                <h4 class="mt-0 header-title">{{group}}<i
+                                                <h4 class="mt-0 header-title">{{group.table_name}}<i
                                                         class="fas fa-chevron-down"></i>
                                                 </h4>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dr-men-right">
                                                 <!-- item-->
-                                                <a class="dropdown-item" *ngIf="collapsed===false"
-                                                    (click)="collapsed=true"><img
+                                                <a class="dropdown-item" *ngIf="collapsed === getCollapse()"
+                                                    (click)="tableCollapse(group)"><img
                                                         src="assets/icons/unfold_more-24px.svg">
                                                     Collapase this group</a>
                                                 <a class="dropdown-item" *ngIf="collapsed===true"
-                                                    (click)="collapsed=false"><span class="mdi mdi-arrow-expand"></span>
+                                                    (click)="tableExpand(group)"><span class="mdi mdi-arrow-expand"></span>
                                                     Expand this group</a>
-                                                <a class="dropdown-item" href="#"><i class="mdi mdi-pencil-outline"></i>
+                                                <a class="dropdown-item" (click)="renameTable(group)"><i
+                                                        class="mdi mdi-pencil-outline"></i>
                                                     Rename group</a>
-                                                <a class="dropdown-item" href="#"><i class="fas fa-trash"></i>
+                                                <a class="dropdown-item" (click)="deleteTable(group)"><i
+                                                        class="fas fa-trash"></i>
                                                     Delete</a>
                                             </div>
                                         </div>
@@ -83,7 +85,7 @@
                                             <ng-container>
                                                 <ng-container *ngIf="column === 'select';else elseBlock" sticky>
                                                     <mat-header-cell *matHeaderCellDef>
-                                                        
+
                                                     </mat-header-cell>
                                                 </ng-container>
                                                 <ng-template #elseBlock>
@@ -101,8 +103,8 @@
                                                                 <div class="table-drp-men dropdown-menu"
                                                                     aria-labelledby="dropdownMenuButton">
                                                                     <a class="table-drp-item dropdown-item"
-                                                                        *ngFor="let colHead of columnHeaders;let index = index" (click)="addColumn(index)"><img
-                                                                            class="drp-img"
+                                                                        *ngFor="let colHead of columnHeaders;let index = index"
+                                                                        (click)="addColumn(index)"><img class="drp-img"
                                                                             [src]="colHead.icon">{{colHead.choice}}</a>
                                                                 </div>
                                                             </div>
@@ -119,7 +121,8 @@
                                                                     <mat-form-field class="example-full-width">
                                                                         <input matInput
                                                                             [formControl]="getHeaderControl(i, column)"
-                                                                            editableOnEnter (input)="updateHeader(index,column , $event.target.value)">
+                                                                            editableOnEnter
+                                                                            (input)="updateHeader(index,column , $event.target.value)">
                                                                     </mat-form-field>
                                                                 </ng-template>
                                                             </editable>
@@ -146,8 +149,6 @@
                                                                 <ng-template #elseText>
                                                                     {{element[column]}}
                                                                 </ng-template>
-
-
                                                             </ng-template>
                                                             <ng-template editMode>
                                                                 <mat-form-field class="example-full-width">
@@ -156,8 +157,8 @@
                                                                         [formControl]="getControl(index, 'text')"
                                                                         editableOnEnter>
                                                                     <mat-error
-                                                                        *ngIf="getControl(index, 'text').hasError('required')">
-                                                                        This Field is required!
+                                                                        *ngIf="getControl(index, 'text').hasError('pattern')">
+                                                                        Only alphabets are allowed!
                                                                     </mat-error>
                                                                 </mat-form-field>
                                                             </ng-template>
@@ -190,19 +191,20 @@
                                                     <ng-container *ngIf="column === 'peoples'">
                                                         <editable (update)="updateField(index, column)">
                                                             <ng-template viewMode>
-                                                                    <ng-container *ngIf="element[column]['name'] == '';else elseMember">
-                                                                            <button
-                                                                                class="btn table-input-member-control rounded-circle">
-                                                                                <i class="mdi mdi-account"></i>
-                                                                            </button>
-                                                                        </ng-container>
-                                                                        <ng-template #elseMember>
-                                                                                <div>
-                                                                                        <img [src]="element[column]['img']" alt=""
-                                                                                            class="thumb-md rounded-circle mr-2">
-                                                                                        {{element[column]['name']}}
-                                                                                    </div>
-                                                                        </ng-template>
+                                                                <ng-container
+                                                                    *ngIf="element[column]['name'] == '';else elseMember">
+                                                                    <button
+                                                                        class="btn table-input-member-control rounded-circle">
+                                                                        <i class="mdi mdi-account"></i>
+                                                                    </button>
+                                                                </ng-container>
+                                                                <ng-template #elseMember>
+                                                                    <div>
+                                                                        <img [src]="element[column]['img']" alt=""
+                                                                            class="thumb-md rounded-circle mr-2">
+                                                                        {{element[column]['name']}}
+                                                                    </div>
+                                                                </ng-template>
 
 
                                                             </ng-template>
@@ -273,7 +275,7 @@
                                                                 <mat-form-field class="example-full-width">
                                                                     <input matInput
                                                                         [formControl]="getControl(index, 'numbers')"
-                                                                        editableOnEnter >
+                                                                        editableOnEnter>
                                                                     <mat-error
                                                                         *ngIf="getControl(index, 'numbers').hasError('pattern')">
                                                                         Only digits are allowed!

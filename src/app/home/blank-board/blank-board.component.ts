@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { MatSort } from '@angular/material';
+import { MatSort, MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -9,6 +9,8 @@ import { PeriodicElement } from 'src/app/models/periodic';
 import { CoreService } from 'src/app/services/core.service';
 import { BoardService } from 'src/app/services/board.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Table } from 'src/app/models/columnHeader';
+import { CreateTableDialogComponent } from 'src/app/dialog/create-table-dialog/create-table-dialog.component';
 
 
 @Component({
@@ -19,9 +21,13 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 export class BlankBoardComponent implements OnInit {
 
   public board_id;
-  public numberRegex ="^[0-9]*$";
+  public numberRegex = "^[0-9]*$";
+  public textRegex = "^[A-Za-z]+$";
+  tableDetails: Table;
+  tName: string;
+  selectedTable = "";
 
-  displayedColumns: string[] = ['select' , 'star'];
+  displayedColumns: string[] = ['select', 'star'];
   columnsToDisplay: string[] = [];
   dataSource: any;
   controls: FormArray;
@@ -30,7 +36,7 @@ export class BlankBoardComponent implements OnInit {
   data = Object.assign(this.core.list);
   selected = "";
 
-  groups = ['group 1', 'group 2'];
+  tables = [];
 
   columnHeaders = [];
 
@@ -38,9 +44,9 @@ export class BlankBoardComponent implements OnInit {
   options = [];
   myControl = new FormControl();
   filteredOptions: Observable<string[]>;
-  toGroups:any
+  toGroups: any
 
-  public collapsed = false;
+  public collapsed = 0;
 
   selection = new SelectionModel<PeriodicElement[]>(true, []);
 
@@ -54,28 +60,48 @@ export class BlankBoardComponent implements OnInit {
 
   constructor(private core: CoreService,
     private _boardService: BoardService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    public snackBar: MatSnackBar,
+    public dialog: MatDialog) { }
 
 
   ngOnInit() {
 
-    this.core.listHeader.forEach((item) => {this.displayedColumns.splice(1,0,item)
-    console.log(this.displayedColumns)}
-    )
-      this.columnsToDisplay = this.displayedColumns.slice();
-    
+    this.core.listHeader.forEach((item) => this.displayedColumns.splice(1, 0, item))
+    this.columnsToDisplay = this.displayedColumns.slice();
+
 
     // To retrive board_id from url passed as params.
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = parseInt(params.get('id'));
       this.board_id = id;
+      console.log(this.board_id);
+
+      this._boardService.getTableDetails(this.board_id)
+        .subscribe(
+          res => {
+            this.tables = [];
+            console.log(res);
+            res.map(item => {
+              item['tables'].map(element => {
+                this.tables.push(element);
+              })
+            })
+            console.log(this.tables)
+          },
+          error => {
+            console.log(error);
+          }
+        )
+
     })
+
+
 
     // Display table-header choices on page load.
     this._boardService.getChoices()
       .subscribe(
         res => {
-          console.log(res);
           this.columnHeaders = res;
         },
         err => {
@@ -87,7 +113,6 @@ export class BlankBoardComponent implements OnInit {
       .subscribe(
         res => {
           this.options = res;
-          console.log(res);
         },
         err => {
           console.log(err);
@@ -102,10 +127,10 @@ export class BlankBoardComponent implements OnInit {
 
     this.toGroups = this.core.list$.value.map(entity => {
       return new FormGroup({
-        text: new FormControl(entity.text, [Validators.required]),
-        status: new FormControl(entity.status, [Validators.required]),
-        date: new FormControl(entity.date, Validators.required),
-        peoples: new FormControl(entity.peoples, Validators.required),
+        text: new FormControl(entity.text, Validators.pattern(this.textRegex)),
+        status: new FormControl(entity.status),
+        date: new FormControl(entity.date),
+        peoples: new FormControl(entity.peoples),
         numbers: new FormControl(entity.numbers, Validators.pattern(this.numberRegex)),
       });
     });
@@ -149,6 +174,7 @@ export class BlankBoardComponent implements OnInit {
   // To update a cell.
   updateField(index, field) {
     let control = this.getControl(index, field);
+    console.log(control);
     if (control.valid) {
       this.core.update(index, field, control.value);
       this.dataSource.sort = this.sort;
@@ -158,8 +184,8 @@ export class BlankBoardComponent implements OnInit {
   }
 
   updateHeader(index, event) {
-      this.core.updateHeader(index, event)
-      this.dataSource.sort = this.sort;
+    this.core.updateHeader(index, event)
+    this.dataSource.sort = this.sort;
   }
 
   removeSelectedRows() {
@@ -223,7 +249,7 @@ export class BlankBoardComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option['first_name'].toLowerCase().includes(filterValue));
   }
- 
+
 
   getTotalCost() {
 
@@ -237,5 +263,76 @@ export class BlankBoardComponent implements OnInit {
     this.columnsToDisplay.push(this.displayedColumns[index]);
   }
 
+
+  //Delete a particular table
+  deleteTable(table) {
+    this.tableDetails = {
+      id: table.id,
+      board: this.board_id,
+      table_name: table.table_name
+    }
+    this._boardService.deleteTable(this.tableDetails)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.snackBar.open("Table deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
+        },
+        error => {
+          this.snackBar.open("Error while deleting Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+          console.log(error);
+        }
+      )
+
+  }
+
+  //Delete a Table
+  renameTable(table) {
+
+    let dialogref = this.dialog.open(CreateTableDialogComponent, {
+      data: { tname: this.tName }
+    });
+
+    dialogref.afterClosed().subscribe(result => {
+
+      if (result === false) {
+        null;
+      }
+      else {
+
+        this.tableDetails = {
+          id: table.id,
+          board: this.board_id,
+          table_name: result
+        }
+        console.log(this.tableDetails)
+        this._boardService.renameTable(this.tableDetails)
+          .subscribe(
+            res => {
+              this.snackBar.open("Table renamed successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+            },
+            error => {
+              console.log(error);
+              this.snackBar.open("Error while renaming Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+            }
+          )
+
+      }
+
+
+
+    })
+  }
+
+  getCollapse(){
+        return this.collapsed
+  }
+
+  tableCollapse(group){
+    this.collapsed = group.id;
+  }
+  // tableExpand(group){
+  //   this.collapsed = false;
+  //   group.collapse = false;
+  // }
 
 }

@@ -24,11 +24,12 @@ export class HeaderComponent implements OnInit {
   public boardName: Array<BoardDetails> = [];
   public pageHeader = "";
   bName: string;
-  bId : number;
+  bId: number;
   boardhead: BoardDetails;
-  tableName : Table;
+  tableName: Table;
   tName: string;
   navButton = false;
+  selectedBoard = "";
 
   constructor(public dialog: MatDialog,
     private _boardService: BoardService,
@@ -44,8 +45,6 @@ export class HeaderComponent implements OnInit {
       .subscribe(
         res => {
           this.userDetails = res;
-          console.log("user Details", res);
-
         },
         err => {
           if (err instanceof HttpErrorResponse) {
@@ -84,19 +83,19 @@ export class HeaderComponent implements OnInit {
       if (result === false) {
         null;
       } else {
-        console.log("The dialog closed! : " + result);
         this.boardhead = {
           board_name: result
         }
         this._boardService.createBoard(this.boardhead)
           .subscribe(
             res => {
+              console.log(res)
               this.boardName.push(res)
-              this.snackBar.open("Board added successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' , panelClass: ["success-snackbar"] });
+              this.snackBar.open("Board added successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while adding Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' , panelClass: ['warning-snackbar'] });
+              this.snackBar.open("Error while adding Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
             }
           )
       }
@@ -115,10 +114,11 @@ export class HeaderComponent implements OnInit {
       .subscribe(
         res => {
           this.boardName = res;
-          this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top', panelClass: ["success-snackbar"] })
+          this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
         },
         error => {
-          this.snackBar.open("Error while deleting Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' , panelClass: ['warning-snackbar'] });
+          this.snackBar.open("Error while deleting Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+          console.log(error);
         }
       )
   }
@@ -136,20 +136,18 @@ export class HeaderComponent implements OnInit {
         null;
       }
       else {
-        console.log("Dialog closed! " + result);
         this.tableName = {
-          "table_name" : result,
-          "board" : this.bId
+          "table_name": result,
+          "board": this.bId
         }
-        console.log(this.tableName);
         this._boardService.createtable(this.tableName)
           .subscribe(
             res => {
-              this.snackBar.open("Table created successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' , panelClass: ["success-snackbar"] });
+              this.snackBar.open("Table created successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while creating Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' , panelClass: ['warning-snackbar'] });
+              this.snackBar.open("Error while creating Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
             }
           )
       }
@@ -160,12 +158,13 @@ export class HeaderComponent implements OnInit {
   boardDetails(item) {
     // To display Board details .
     this.navButton = true;
+    this.selectedBoard = item.board_name;
     this.pageHeader = item.board_name;
     this.bId = item.id;
 
   }
 
-// User Image default Avatar.
+  // User Image default Avatar.
   errorHandler(event) {
     console.debug(event);
     event.target.src = "https://ui-avatars.com/api/?name=" + this.userDetails.first_name.charAt(0) + "&background=560078&color=ffffff";

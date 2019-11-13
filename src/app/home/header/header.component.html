@@ -37,7 +37,7 @@
                                 Edit Profile Picture</a>
                             <a class="dropdown-item" href="#" routerLink="/resetpassword" routerLinkActive="active"><i
                                     class="mdi mdi-lock"></i> Reset Password</a>
-                            <a class="dropdown-item" (click)="_authService.logoutUser()"><img class="drop-img"
+                            <a class="dropdown-item" href="#" (click)="_authService.logoutUser()"><img class="drop-img"
                                     src="assets/icons/logout.svg">
                                 Logout</a>
                         </div>
@@ -73,8 +73,10 @@
                     </a>
                 <li>
                 <li *ngFor="let tabName of boardName">
-                    <a class="waves-effect" (click)="boardDetails(tabName)" [routerLink] = "['/home/blankboard',tabName.id]" routerLinkActive="active">
-                        <a class="mdi mdi-delete float-right" (click)=deleteBoards(tabName)></a>
+                    <a class="waves-effect" (click)="boardDetails(tabName)"
+                        [routerLink]="['/home/blankboard',tabName.id]" routerLinkActive="active">
+                        <a class="mdi mdi-delete float-right" *ngIf="tabName.board_name === selectedBoard"
+                            (click)=deleteBoards(tabName)></a>
                         <div class="nav-side-list">
                             <a>{{tabName.board_name}}</a>
                         </div>

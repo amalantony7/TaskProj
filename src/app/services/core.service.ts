@@ -1,12 +1,19 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs'
+import { Injectable, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject, throwError } from 'rxjs'
 
 import { PeriodicElement } from '../models/periodic';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { BoardService } from './board.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class CoreService {
+export class CoreService implements OnInit {
+
+
+
 
   listHeader: string[] = ['peoples', 'numbers', 'date',  'status', 'text' ];
 
@@ -19,10 +26,16 @@ export class CoreService {
 
   listHeader$: BehaviorSubject<string[]> = new BehaviorSubject(this.listHeader);
 
-  isLoading = new Subject<boolean>();
 
-  constructor() {
+  constructor(private _http : HttpClient, private _boardService : BoardService) {
   }
+
+
+  ngOnInit(){
+
+                      
+  }
+
 
 
   update(index, field, value) {
@@ -46,12 +59,6 @@ export class CoreService {
   getControl(index, fieldName) {
   }
 
-  showLoader() {
-    this.isLoading.next(true);
-  }
 
-  hideLoader() {
-    this.isLoading.next(false);
-  }
 
 }

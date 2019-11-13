@@ -2,19 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { BoardDetails, UserData, Choices, Members } from '../models/columnHeader';
+import { BoardDetails, UserData, Choices, Members, Table } from '../models/columnHeader';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardService {
 
-  private _usrUrl = "https://b662336c.ngrok.io/dashboard/current-users/";
-  private _listUrl = "https://b662336c.ngrok.io/dashboard/create-board/";
-  private _tableUrl = "https://b662336c.ngrok.io/dashboard/create-table/";
+  private _usrUrl = "https://503f77fb.ngrok.io/dashboard/current-users/";
+  private _boardUrl = "https://503f77fb.ngrok.io/dashboard/create-board/";
+  private _tableUrl = "https://503f77fb.ngrok.io/dashboard/create-table/";
 
-  private _choiceUrl = "https://b662336c.ngrok.io/dashboard/display-choice-options/";
-  private _membersUrl = "https://b662336c.ngrok.io/dashboard/display-user-list/";
+  private _choiceUrl = "https://503f77fb.ngrok.io/dashboard/display-choice-options/";
+  private _membersUrl = "https://503f77fb.ngrok.io/dashboard/display-user-list/";
+  private _fullListUrl = "https://503f77fb.ngrok.io/dashboard/list-table/";
+
 
   constructor(private _http: HttpClient) { }
 
@@ -29,26 +31,48 @@ export class BoardService {
   }
 
   createBoard(list) {
-    return this._http.post<BoardDetails>(this._listUrl, list)
+    return this._http.post<BoardDetails>(this._boardUrl, list)
       .pipe(catchError(this.errorHandler));
   }
 
   getBoardList() {
-    return this._http.get<Array<BoardDetails>>(this._listUrl)
+    return this._http.get<Array<BoardDetails>>(this._boardUrl)
       .pipe(catchError(this.errorHandler));
   }
 
   deleteBoard(board_id) {
-    const url = `${this._listUrl}${board_id.id}/`;
+    const url = `${this._boardUrl}${board_id.id}/`;
     return this._http.delete<Array<BoardDetails>>(url)
       .pipe(catchError(this.errorHandler));
   }
 
 
   createtable(list) {
-    return this._http.post<any>(this._tableUrl, list)
+    return this._http.post<Array<Table>>(this._tableUrl, list)
       .pipe(catchError(this.errorHandler));
   }
+
+
+  getTableDetails(board_id){
+    const params = new HttpParams().set('id' , board_id);
+    return this._http.get<any>(this._fullListUrl , {params : params})
+                  .pipe(catchError(this.errorHandler))
+  }
+
+
+  deleteTable(table){
+    const url = `${this._tableUrl}${table.id}/`;
+    return this._http.delete<Array<Table>>(url)
+                .pipe(catchError(this.errorHandler));
+  }
+
+  renameTable(table){
+    const url = `${this._tableUrl}${table.id}/`;
+    return this._http.put<Array<Table>>(url , table)
+                      .pipe(catchError(this.errorHandler));
+
+  }
+
 
   getChoices() {
     return this._http.get<Array<Choices>>(this._choiceUrl)
