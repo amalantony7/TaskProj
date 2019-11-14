@@ -7,7 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserData, BoardDetails, Table } from 'src/app/models/columnHeader';
-import { MatSnackBar } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
+import { CoreService } from 'src/app/services/core.service';
 
 @Component({
   selector: 'app-header',
@@ -35,7 +36,8 @@ export class HeaderComponent implements OnInit {
     private _boardService: BoardService,
     private _authService: AuthService,
     private _router: Router,
-    private snackBar: MatSnackBar) { }
+    public toastr : ToastrService,
+    public core:CoreService) { }
 
   ngOnInit() {
 
@@ -91,11 +93,11 @@ export class HeaderComponent implements OnInit {
             res => {
               console.log(res)
               this.boardName.push(res)
-              this.snackBar.open("Board added successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+              this.toastr.success("Board added successfully", '', { timeOut: 2000});
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while adding Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+              this.toastr.error("Error while adding Board", '', { timeOut: 2000});
             }
           )
       }
@@ -114,10 +116,10 @@ export class HeaderComponent implements OnInit {
       .subscribe(
         res => {
           this.boardName = res;
-          this.snackBar.open("Board deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
+          this.toastr.success("Board deleted successfully", '');
         },
         error => {
-          this.snackBar.open("Error while deleting Board", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+          this.toastr.error("Error while deleting Board", '');
           console.log(error);
         }
       )
@@ -143,11 +145,12 @@ export class HeaderComponent implements OnInit {
         this._boardService.createtable(this.tableName)
           .subscribe(
             res => {
-              this.snackBar.open("Table created successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+              this.toastr.success("Table created successfully", '');
+              this.refreshTables()
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while creating Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+              this.toastr.error("Error while creating Table", '');
             }
           )
       }
@@ -168,6 +171,11 @@ export class HeaderComponent implements OnInit {
   errorHandler(event) {
     console.debug(event);
     event.target.src = "https://ui-avatars.com/api/?name=" + this.userDetails.first_name.charAt(0) + "&background=560078&color=ffffff";
+  }
+
+  
+  refreshTables(){
+    this.core.refreshList.next(true);
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { MatSort, MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
+import { MatSort, MatDialogRef, MatDialog } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -11,6 +11,7 @@ import { BoardService } from 'src/app/services/board.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Table } from 'src/app/models/columnHeader';
 import { CreateTableDialogComponent } from 'src/app/dialog/create-table-dialog/create-table-dialog.component';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -46,7 +47,7 @@ export class BlankBoardComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   toGroups: any
 
-  public collapsed = 0;
+  public collapsed;
 
   selection = new SelectionModel<PeriodicElement[]>(true, []);
 
@@ -61,11 +62,35 @@ export class BlankBoardComponent implements OnInit {
   constructor(private core: CoreService,
     private _boardService: BoardService,
     private route: ActivatedRoute,
-    public snackBar: MatSnackBar,
+    public toastr: ToastrService,
     public dialog: MatDialog) { }
 
 
   ngOnInit() {
+
+
+    this.core.refreshList.subscribe(refresh => {
+      if (refresh) {
+
+        this._boardService.getTableDetails(this.board_id)
+        .subscribe(
+          res => {
+            this.tables = [];
+
+            res.map(item => {
+              item['tables'].map(element => {
+                this.tables.push(element);
+              })
+            })
+
+          },
+          error => {
+            console.log(error);
+          }
+        )
+
+      }
+    })
 
     this.core.listHeader.forEach((item) => this.displayedColumns.splice(1, 0, item))
     this.columnsToDisplay = this.displayedColumns.slice();
@@ -81,13 +106,12 @@ export class BlankBoardComponent implements OnInit {
         .subscribe(
           res => {
             this.tables = [];
-            console.log(res);
+
             res.map(item => {
               item['tables'].map(element => {
                 this.tables.push(element);
               })
             })
-            console.log(this.tables)
           },
           error => {
             console.log(error);
@@ -265,7 +289,7 @@ export class BlankBoardComponent implements OnInit {
 
 
   //Delete a particular table
-  deleteTable(table) {
+  deleteTable(table, index) {
     this.tableDetails = {
       id: table.id,
       board: this.board_id,
@@ -275,10 +299,12 @@ export class BlankBoardComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.snackBar.open("Table deleted successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' })
+          this.toastr.success("Table deleted successfully", '');
+          this.tables.splice(index, 1);
+          this.tables = this.tables;
         },
         error => {
-          this.snackBar.open("Error while deleting Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+          this.toastr.error("Error while deleting Table", '');
           console.log(error);
         }
       )
@@ -286,7 +312,7 @@ export class BlankBoardComponent implements OnInit {
   }
 
   //Delete a Table
-  renameTable(table) {
+  renameTable(table, index) {
 
     let dialogref = this.dialog.open(CreateTableDialogComponent, {
       data: { tname: this.tName }
@@ -308,11 +334,14 @@ export class BlankBoardComponent implements OnInit {
         this._boardService.renameTable(this.tableDetails)
           .subscribe(
             res => {
-              this.snackBar.open("Table renamed successfully", 'Dismiss', { duration: 2000, verticalPosition: 'top' });
+              console.log(res);
+              this.toastr.success("Table renamed successfully", '');
+              this.tables[index]['table_name'] = res['table_name'];
+              this.tables = this.tables;
             },
             error => {
               console.log(error);
-              this.snackBar.open("Error while renaming Table", 'Dismiss', { duration: 2000, horizontalPosition: 'right' });
+              this.toastr.error("Error while renaming Table", '');
             }
           )
 
@@ -323,16 +352,14 @@ export class BlankBoardComponent implements OnInit {
     })
   }
 
-  getCollapse(){
-        return this.collapsed
+
+  tableCollapse(group) {
+    this.collapsed = group.id;
+    console.log(this.collapsed);
   }
 
-  tableCollapse(group){
-    this.collapsed = group.id;
+  tableExpand(group) {
+    this.collapsed = '';
   }
-  // tableExpand(group){
-  //   this.collapsed = false;
-  //   group.collapse = false;
-  // }
 
 }

@@ -9,13 +9,13 @@ import { BoardDetails, UserData, Choices, Members, Table } from '../models/colum
 })
 export class BoardService {
 
-  private _usrUrl = "https://503f77fb.ngrok.io/dashboard/current-users/";
-  private _boardUrl = "https://503f77fb.ngrok.io/dashboard/create-board/";
-  private _tableUrl = "https://503f77fb.ngrok.io/dashboard/create-table/";
+  private _usrUrl = "https://a3ac28bb.ngrok.io/dashboard/current-users/";
+  private _boardUrl = "https://a3ac28bb.ngrok.io/dashboard/create-board/";
+  private _tableUrl = "https://a3ac28bb.ngrok.io/dashboard/create-table/";
 
-  private _choiceUrl = "https://503f77fb.ngrok.io/dashboard/display-choice-options/";
-  private _membersUrl = "https://503f77fb.ngrok.io/dashboard/display-user-list/";
-  private _fullListUrl = "https://503f77fb.ngrok.io/dashboard/list-table/";
+  private _choiceUrl = "https://a3ac28bb.ngrok.io/dashboard/display-choice-options/";
+  private _membersUrl = "https://a3ac28bb.ngrok.io/dashboard/display-user-list/";
+  private _fullListUrl = "https://a3ac28bb.ngrok.io/dashboard/list-table/";
 
 
   constructor(private _http: HttpClient) { }

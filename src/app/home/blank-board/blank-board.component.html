@@ -5,7 +5,7 @@
 
             <div class="row">
                 <div class="col-xl-12">
-                    <mat-card class="card m-b-30 mt-4" *ngFor="let group of tables">
+                    <mat-card class="card m-b-30 mt-4" *ngFor="let group of tables; let g = index">
                         <mat-card-content class="card-body">
                             <div class="page-title-box pt-1">
                                 <div class="row align-items-center">
@@ -18,17 +18,19 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dr-men-right">
                                                 <!-- item-->
-                                                <a class="dropdown-item" *ngIf="collapsed === getCollapse()"
+                                                <a class="dropdown-item" *ngIf="!collapsed;else elseCase"
                                                     (click)="tableCollapse(group)"><img
                                                         src="assets/icons/unfold_more-24px.svg">
                                                     Collapase this group</a>
-                                                <a class="dropdown-item" *ngIf="collapsed===true"
+                                                <ng-template #elseCase>
+                                                    <a class="dropdown-item" 
                                                     (click)="tableExpand(group)"><span class="mdi mdi-arrow-expand"></span>
                                                     Expand this group</a>
-                                                <a class="dropdown-item" (click)="renameTable(group)"><i
+                                                </ng-template>
+                                                <a class="dropdown-item" (click)="renameTable(group , g)"><i
                                                         class="mdi mdi-pencil-outline"></i>
                                                     Rename group</a>
-                                                <a class="dropdown-item" (click)="deleteTable(group)"><i
+                                                <a class="dropdown-item" (click)="deleteTable(group , g)"><i
                                                         class="fas fa-trash"></i>
                                                     Delete</a>
                                             </div>
@@ -76,7 +78,7 @@
 
                                 </div> <!-- end row -->
                             </div>
-                            <div [style.display]="collapsed? 'none' : 'block'">
+                            <div [style.display]="collapsed == group.id? 'none' : 'block'">
                                 <div class="table-responsive">
 
                                     <table mat-table [dataSource]="dataSource" matSort class="table table-hover">

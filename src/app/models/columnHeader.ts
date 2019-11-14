@@ -43,4 +43,10 @@ export interface HeaderElement{
     numbers : number
 }
 
+export interface ColumnHeaders{
+    id? : number,
+    field_name : string,
+    field_type : string
+}
+
 

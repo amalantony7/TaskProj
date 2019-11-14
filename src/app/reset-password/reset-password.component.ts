@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Passwordvalidator } from '../validators/password_validator';
 import { AuthService } from '../services/auth.service';
-import { MatSnackBar } from '@angular/material';
 import { ResetPassword } from '../models/columnHeader';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,8 +21,8 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(private fb : FormBuilder,
               private _authService : AuthService,
-              public snackBar : MatSnackBar,
-              private _router : Router) { }
+              private _router : Router,
+              private toastr : ToastrService) { }
 
   get oPassword(){
     return this.resetForm.get('oPassword');
@@ -54,13 +54,13 @@ export class ResetPasswordComponent implements OnInit {
       this._authService.resetPassword(this.rPass)
                           .subscribe(
                             res => {
-                              this.snackBar.open("Password Changed Successfully" , 'Dismiss' , {duration : 2000 , verticalPosition : 'top'});
+                              this.toastr.success("Password Changed Successfully" , '');
                               myForm.reset();
                               this._router.navigate(['/home']);
                             },
                             error => {
                               console.log(error);
-                              this.snackBar.open("Password reset failed!" , 'Dismiss' , {duration : 2000 , horizontalPosition : 'end'});
+                              this.toastr.error("Password reset failed!" , '' );
                             }
                           )
   }

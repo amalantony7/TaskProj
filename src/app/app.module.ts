@@ -62,7 +62,8 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     NgxUiLoaderModule,
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right'
+      positionClass: 'toast-bottom-right',
+      timeOut : 2000
     }),
     NgxUiLoaderHttpModule.forRoot({
       showForeground: true
